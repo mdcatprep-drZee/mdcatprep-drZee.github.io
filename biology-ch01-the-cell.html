@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Biology | Chapter 1: The Cell — MDCAT Prep by Dr. Zee</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a0f1e; --surface: #111827; --card: #151e2e;
+      --border: rgba(255,255,255,0.07); --accent: #5cf7b0;
+      --accent2: #4f8ef7; --text: #e8edf5; --muted: #7a8599;
+      --correct: #5cf7b0; --wrong: #f75c5c; --neutral: #4f8ef7;
+    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+    body::before { content: ''; position: fixed; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; z-index: 0; }
+    .orb { position: fixed; border-radius: 50%; filter: blur(90px); opacity: 0.18; pointer-events: none; z-index: 0; }
+    .orb1 { width: 350px; height: 350px; background: var(--accent); top: -80px; right: -80px; }
+    .orb2 { width: 280px; height: 280px; background: var(--accent2); bottom: -60px; left: -60px; }
+
+    /* HEADER */
+    header { position: sticky; top: 0; z-index: 10; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); backdrop-filter: blur(12px); background: rgba(10,15,30,0.75); }
+    .back-btn { display: flex; align-items: center; gap: 6px; text-decoration: none; color: var(--muted); font-size: 0.82rem; font-weight: 500; transition: color 0.2s; }
+    .back-btn:hover { color: var(--text); }
+    .header-badge { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; background: rgba(92,247,176,0.12); border: 1px solid rgba(92,247,176,0.25); color: var(--accent); padding: 4px 12px; border-radius: 20px; }
+
+    /* HERO */
+    .hero { position: relative; z-index: 1; padding: 40px 20px 32px; text-align: center; }
+    .chapter-tag { display: inline-flex; align-items: center; gap: 6px; background: rgba(92,247,176,0.08); border: 1px solid rgba(92,247,176,0.2); color: var(--accent); font-size: 0.75rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; padding: 5px 14px; border-radius: 20px; margin-bottom: 16px; }
+    .hero h1 { font-family: 'Syne', sans-serif; font-size: clamp(1.6rem, 4vw, 2.6rem); font-weight: 800; line-height: 1.15; margin-bottom: 8px; }
+    .hero h1 span { background: linear-gradient(90deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero p { color: var(--muted); font-size: 0.88rem; margin-bottom: 28px; }
+
+    /* SCOREBOARD */
+    .scoreboard { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+    .score-box { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px 20px; text-align: center; min-width: 80px; }
+    .score-num { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.5rem; }
+    .score-num.total { color: var(--accent2); }
+    .score-num.correct { color: var(--correct); }
+    .score-num.wrong { color: var(--wrong); }
+    .score-num.remaining { color: var(--muted); }
+    .score-label { font-size: 0.7rem; color: var(--muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.05em; }
+
+    /* PROGRESS */
+    .progress-wrap { position: relative; z-index: 1; max-width: 700px; margin: 16px auto 0; padding: 0 20px; }
+    .progress-bar { height: 5px; background: var(--surface); border-radius: 10px; overflow: hidden; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 10px; transition: width 0.4s ease; width: 0%; }
+
+    /* QUIZ AREA */
+    .quiz-area { position: relative; z-index: 1; max-width: 700px; margin: 28px auto 60px; padding: 0 16px; }
+
+    .question-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; margin-bottom: 16px; animation: fadeUp 0.35s ease both; }
+    .q-number { font-size: 0.72rem; color: var(--muted); font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 10px; }
+    .q-text { font-size: 0.97rem; font-weight: 500; line-height: 1.6; color: var(--text); margin-bottom: 18px; }
+
+    .options { display: flex; flex-direction: column; gap: 8px; }
+    .option {
+      display: flex; align-items: center; gap: 12px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 11px 14px; cursor: pointer;
+      transition: border-color 0.18s, background 0.18s, transform 0.1s;
+      font-size: 0.88rem; color: var(--text);
+    }
+    .option:hover:not(.disabled) { border-color: rgba(92,247,176,0.35); background: rgba(92,247,176,0.05); transform: translateX(2px); }
+    .option-letter { width: 26px; height: 26px; border-radius: 7px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.75rem; flex-shrink: 0; transition: background 0.18s; }
+    .option.correct { border-color: var(--correct); background: rgba(92,247,176,0.08); }
+    .option.correct .option-letter { background: var(--correct); color: #0a0f1e; border-color: var(--correct); }
+    .option.wrong { border-color: var(--wrong); background: rgba(247,92,92,0.08); }
+    .option.wrong .option-letter { background: var(--wrong); color: #fff; border-color: var(--wrong); }
+    .option.disabled { cursor: default; }
+
+    /* RESULT PANEL */
+    #resultPanel { display: none; position: relative; z-index: 1; max-width: 700px; margin: 40px auto 60px; padding: 0 16px; text-align: center; }
+    .result-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 36px 24px; }
+    .result-emoji { font-size: 3rem; margin-bottom: 12px; }
+    .result-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.6rem; margin-bottom: 6px; }
+    .result-title span { background: linear-gradient(90deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .result-sub { color: var(--muted); font-size: 0.88rem; margin-bottom: 28px; }
+    .result-stats { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; margin-bottom: 28px; }
+    .result-stat { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 20px; min-width: 100px; }
+    .result-stat-num { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.6rem; }
+    .result-stat-label { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 2px; }
+    .restart-btn { display: inline-block; background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #0a0f1e; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.92rem; padding: 13px 32px; border-radius: 12px; border: none; cursor: pointer; transition: opacity 0.2s, transform 0.1s; margin-right: 10px; }
+    .restart-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+    .home-btn { display: inline-block; background: var(--surface); color: var(--text); font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.92rem; padding: 13px 32px; border-radius: 12px; border: 1px solid var(--border); cursor: pointer; text-decoration: none; transition: border-color 0.2s; }
+    .home-btn:hover { border-color: rgba(255,255,255,0.2); }
+
+    footer { position: relative; z-index: 1; text-align: center; padding: 24px; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.78rem; }
+    footer strong { color: var(--accent); }
+
+    /* TIMER */
+    .timer-wrap { position: relative; z-index: 1; max-width: 700px; margin: 18px auto 0; padding: 0 20px; }
+    .timer-box { display: flex; align-items: center; justify-content: space-between; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px 18px; }
+    .timer-left { display: flex; align-items: center; gap: 10px; }
+    .timer-icon { font-size: 1.1rem; }
+    .timer-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+    .timer-display { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.4rem; color: var(--accent); transition: color 0.3s; }
+    .timer-display.warning { color: #f7a14f; }
+    .timer-display.danger { color: var(--wrong); animation: pulse 1s infinite; }
+    .timer-progress-bar { height: 4px; background: var(--surface); border-radius: 10px; overflow: hidden; margin-top: 8px; }
+    .timer-progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 10px; transition: width 1s linear, background 0.3s; width: 100%; }
+    .timer-progress-fill.warning { background: linear-gradient(90deg, #f7a14f, #f75c5c); }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+    @media (max-width: 500px) { .score-box { padding: 10px 14px; min-width: 65px; } .score-num { font-size: 1.2rem; } }
+  </style>
+</head>
+<body>
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+
+  <header>
+    <a href="index.html" class="back-btn">← Back to Home</a>
+    <div class="header-badge">🧬 Biology</div>
+  </header>
+
+  <section class="hero">
+    <div class="chapter-tag">🧬 Chapter 01</div>
+    <h1>The <span>Cell</span></h1>
+    <p>50 MCQs — Attempt all questions and track your score</p>
+    <div class="scoreboard">
+      <div class="score-box"><div class="score-num total" id="scoreTotal">0</div><div class="score-label">Score</div></div>
+      <div class="score-box"><div class="score-num correct" id="scoreCorrect">0</div><div class="score-label">Correct</div></div>
+      <div class="score-box"><div class="score-num wrong" id="scoreWrong">0</div><div class="score-label">Wrong</div></div>
+      <div class="score-box"><div class="score-num remaining" id="scoreRemaining">50</div><div class="score-label">Remaining</div></div>
+    </div>
+  </section>
+
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+
+  <div class="timer-wrap">
+    <div class="timer-box">
+      <div class="timer-left">
+        <div class="timer-icon">⏱️</div>
+        <div>
+          <div class="timer-label">Time Remaining</div>
+          <div class="timer-display" id="timerDisplay">50:00</div>
+        </div>
+      </div>
+      <div style="text-align:right">
+        <div class="timer-label">Total Time</div>
+        <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;color:var(--muted)">50 mins</div>
+      </div>
+    </div>
+    <div class="timer-progress-bar"><div class="timer-progress-fill" id="timerFill"></div></div>
+  </div>
+
+  <div class="quiz-area" id="quizArea"></div>
+
+  <div id="resultPanel">
+    <div class="result-card">
+      <div class="result-emoji" id="resultEmoji">🎉</div>
+      <div class="result-title">Quiz <span id="resultTitle">Complete!</span></div>
+      <div class="result-sub" id="resultSub">Here's how you did</div>
+      <div class="result-stats">
+        <div class="result-stat"><div class="result-stat-num" id="rScore" style="color:var(--accent2)">0</div><div class="result-stat-label">Final Score</div></div>
+        <div class="result-stat"><div class="result-stat-num" id="rCorrect" style="color:var(--correct)">0</div><div class="result-stat-label">Correct</div></div>
+        <div class="result-stat"><div class="result-stat-num" id="rWrong" style="color:var(--wrong)">0</div><div class="result-stat-label">Wrong</div></div>
+        <div class="result-stat"><div class="result-stat-num" id="rAccuracy" style="color:var(--accent)">0%</div><div class="result-stat-label">Accuracy</div></div>
+      </div>
+      <button class="restart-btn" onclick="restartQuiz()">↻ Restart Quiz</button>
+      <a href="index.html" class="home-btn">🏠 Home</a>
+    </div>
+  </div>
+
+  <footer>Made with ❤️ by <strong>Dr. Zee</strong> &nbsp;·&nbsp; MDCAT Prep 2025 &nbsp;·&nbsp; Biology — Chapter 01</footer>
+
+  <script>
+    const questions = [
+      { q: "Compound Microscope was invented by Galileo in:", options: ["1610","1510","1660","1713","1613"], answer: 0 },
+      { q: "The term 'CELL' was first used by:", options: ["Robert Brown in 1831","Robert Hooke in 1665","Robert Brown in 1665","Robert Hooke in 1831","Robert Hook & Schwann in 1839"], answer: 1 },
+      { q: "The nucleus in the cell was discovered by:", options: ["Robert Brown in 1831","Robert Hooke in 1665","Robert Brown in 1665","Robert Hooke in 1831","Schleiden in 1838"], answer: 0 },
+      { q: "Which scientist observed that the nucleus was surrounded by a fluid in the cell:", options: ["Robert Brown in 1831","Robert Hooke in 1665","Schwann in 1839","Schleiden in 1838","None of the above"], answer: 2 },
+      { q: "Cell Theory was proposed by:", options: ["Robert Hooke & Robert Brown","Robert Hooke & Schleiden","Schleiden & Schwann","Robert Hooke & Schwann","Galileo"], answer: 2 },
+      { q: "According to Cell Theory:", options: ["Not all organism are composed of cells.","There is no interaction between different cell unit.","Cell is a 'de novo' structure, could arise from non-cellular materials.","Cell can arise only by division of pre-existing cell.","Cell is not the structural unit of life."], answer: 3 },
+      { q: "The microscope in which visible light is used as source of illumination is:", options: ["Light microscope","X-ray microscope","Electron microscope","U-V ray microscope","Transmission Electron microscope"], answer: 0 },
+      { q: "The Electron microscope has been designed by:", options: ["Jensen & Hans of Holland","Schleiden & Schwann of Germany","Knoll & Rusk of Germany","Robert Hooke","None of the above"], answer: 2 },
+      { q: "Microscope unaffected by magnetic field is:", options: ["Electron Microscope","Transmission Electron Microscope","Scanning Electron Microscope","Light Microscope","Light & Electron Microscope both remain unaffected"], answer: 3 },
+      { q: "Magnification of a microscope is calculated by:", options: ["Power of eye piece x magnifying power of its objective","Power of eye piece ÷ magnifying power of its objective","Power of eye piece - magnifying power of its objective","Power of eye piece + magnifying power of its objective","Power of eye piece x magnifying power of its objective ÷ 2"], answer: 0 },
+      { q: "The minimum resolved distance is:", options: ["Magnification","Resolution","Resolation","Resolvation","Centrifugation"], answer: 1 },
+      { q: "With a light microscope, a specimen could quite easily be magnified by as much as:", options: ["10x","100x","1,000x","10,000x","100,000x"], answer: 3 },
+      { q: "To distinguish one part of the cell from another, which one is important?", options: ["Magnification","Resolution","Contrast","Fractionation","Centrifugation"], answer: 2 },
+      { q: "Isolation of cellular components to determine their chemical composition is called:", options: ["Magnification","Resolution","Contrast","Fractionation","Centrifugation"], answer: 3 },
+      { q: "Homogenizer is used for sedimentation in:", options: ["Magnification","Resolution","Contrast","Fractionation","Centrifugation"], answer: 4 },
+      { q: "Biochemical analysis of various cell fractions can be done by:", options: ["Magnification","Centrifugation","Resolution","Contrast","Fractionation"], answer: 1 },
+      { q: "Prokaryotes contain which of the following?", options: ["Mitochondria","Nucleus","Mesosomes","Lysosomes","Chloroplast"], answer: 2 },
+      { q: "Regarding Eukaryotes & Prokaryotes, which statement is correct?", options: ["Eukaryotes are unicellular organisms only","Eukaryotes are multicellular organisms only","Eukaryotes & Prokaryotes both are multicellular organisms","Eukaryotes may be unicellular or multicellular organisms","Prokaryotes may be unicellular or multicellular organisms"], answer: 3 },
+      { q: "Infoldings of Plasma membrane found in Prokaryotes are called:", options: ["Merosomes","Perisomes","Mesosomes","Lysosomes","Nucleoid"], answer: 2 },
+      { q: "Which one of the following is non-membrane bound organelle?", options: ["Mitochondria","Golgi-apparatus","Lysosomes","Peroxisome","Ribosomes"], answer: 4 },
+      { q: "Fluid mosaic model of Plasma membrane was proposed by:", options: ["Jensen & Hans","Singer & Nicolson","Schleiden & Schwann","Knoll & Rusk","Robert Hooke & Robert Brown"], answer: 1 },
+      { q: "The phospholipid molecules in the plasma membrane are arranged in:", options: ["Single layer","Two perpendicular layers","Three perpendicular layers","Two parallel layers","Three parallel layers"], answer: 3 },
+      { q: "Integral proteins are:", options: ["Peripheral proteins","Intrinsic proteins","Extrinsic proteins","Intracellular proteins","Cytoplasmic proteins"], answer: 1 },
+      { q: "Concerning entry and exit of substances across plasma membrane, which statement is correct?", options: ["Passive transport requires energy","Active transport requires energy","Both Passive transport & active transport don't require energy","Osmosis is Active transport","Endocytosis is Passive transport"], answer: 1 },
+      { q: "The process in which the cell membrane helps to take in material by infolding in the form of vacuole is:", options: ["Diffusion","Osmosis","Endocytosis","Exocytosis","None of the above"], answer: 2 },
+      { q: "The process in which liquid material in bulk, is taken in the form of vesicles is:", options: ["Diffusion","Osmosis","Phagocytosis","Exocytosis","Pinocytosis"], answer: 4 },
+      { q: "The process in which solid particles are picked and ingested by the cell is:", options: ["Diffusion","Osmosis","Phagocytosis","Exocytosis","Pinocytosis"], answer: 2 },
+      { q: "The process of membrane fusion and the movement of material out of a cell is:", options: ["Diffusion","Osmosis","Phagocytosis","Exocytosis","Pinocytosis"], answer: 3 },
+      { q: "Which of the following is the non-living component of cell?", options: ["Cell Wall","Ribosomes","Lysosomes","Golgi Apparatus","Endoplasmic Reticulum"], answer: 0 },
+      { q: "A plant cell wall can be differentiated into:", options: ["Two regions","Three regions","Four regions","Four regions","None of the above"], answer: 1 },
+      { q: "Composition of plant Cell Wall (From outside to inside):", options: ["Primary wall → Secondary Wall → Middle Lamella","Primary Wall → Middle Lamella → Secondary Wall","Primary Wall → Middle Lamella → Primary Wall","Middle Lamella → Primary Wall → Secondary Wall","Secondary Wall → Middle Lamella → Primary Wall"], answer: 3 },
+      { q: "Middle Lamella of Cell Wall is composed of:", options: ["Calcium and Potassium pectates","Calcium and Iron pectates","Calcium and Magnesium pectates","Calcium and Manganese pectates","Potassium and Iron pectates"], answer: 2 },
+      { q: "Primary cell wall contains hemicellulose upto:", options: ["10%","30%","50%","70%","90%"], answer: 2 },
+      { q: "The ratio of hemi cellulose to cellulose in primary cell wall is:", options: ["2:1","3:1","4:1","1:1","5:1"], answer: 0 },
+      { q: "Plasmodesmata are places in the cell wall where:", options: ["Extra deposition of wall material take place","Normal deposition of wall material take place","Less deposition of wall material take place","No deposition of wall material take place","None of the above"], answer: 3 },
+      { q: "Concerning nucleus present in the cell:", options: ["All cells have one nucleus","All cells have two nucleus","Nuclear membrane is single-membraned structure","Cells may contain one or two nuclei","More than two nuclei cannot present in any cell"], answer: 3 },
+      { q: "Fluid present in nucleus is called:", options: ["Neoplasm","Nucleoplasm","Karyoplasm","Neolymph","Nucleoplast"], answer: 1 },
+      { q: "No of Autosomes present in human are:", options: ["42","44","46","48","40"], answer: 1 },
+      { q: "A typical chromosome composed of:", options: ["Only chromatid","Only centromere","Both chromatid and centromere","Chromatid or centrosomes","Centromere and centrosomes"], answer: 2 },
+      { q: "Chromatid consists of one or more threads called:", options: ["Centromere","Chromomere","Centrosome","Chromonema","Centronema"], answer: 3 },
+      { q: "Beaded area present on chromatids is:", options: ["Centromere","Chromomere","Centrosome","Chromonema","Centronema"], answer: 1 },
+      { q: "Chromosomes which equal arms resembling the letter 'V' are:", options: ["Metacentric","Sub-metacentric","Acrocentric","Isocentric","Telocentric"], answer: 0 },
+      { q: "Acrocentric chromosomes are also known as:", options: ["Metacentric","Sub-Metacentric","Sub-Telocentric","Non-Centric","Telocentric"], answer: 2 },
+      { q: "Centromere located at the end of chromosome means:", options: ["Metacentric","Sub-metacentric","Acrocentric","Telocentric","Isocentric"], answer: 3 },
+      { q: "Chromosomes with unequal arms and resembling the letter 'J' are:", options: ["Metacentric","Sub-metacentric","Acrocentric","Telocentric","Isocentric"], answer: 1 },
+      { q: "The nucleolus present in nucleus play an important role in the synthesis of:", options: ["Lysosomes","Peroxisomes","Ribosomes","Mesosomes","Endoplasmic Reticulum"], answer: 2 },
+      { q: "Non-membrane bound organelle includes:", options: ["Mitochondria","Golgi apparatus","Centriole","Plastids","Glyoxysomes"], answer: 2 },
+      { q: "Non-membrane bound organelle include:", options: ["Mitochondria","Vacuole","Peroxisome","Golgi Apparatus","Plastids"], answer: 1 },
+      { q: "The movement exhibits by cytoplasm is called:", options: ["Cytosis","Cytoplasmosis","Cyclosis","Cycloplasmosis","Cyclic"], answer: 2 },
+      { q: "Which one of the following organelle is membrane bound?", options: ["Plastid","Ribosome","Centriole","Vacuole","All are incorrect"], answer: 0 },
+    ];
+
+    let correct = 0, wrong = 0, answered = 0;
+    const TOTAL_SECONDS = 50 * 60;
+    let timeLeft = TOTAL_SECONDS;
+    let timerInterval = null;
+
+    function startTimer() {
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        if (timeLeft <= 0) { clearInterval(timerInterval); autoSubmit(); }
+      }, 1000);
+    }
+
+    function updateTimerDisplay() {
+      const mins = Math.floor(timeLeft / 60);
+      const secs = timeLeft % 60;
+      const display = document.getElementById('timerDisplay');
+      const fill = document.getElementById('timerFill');
+      display.textContent = String(mins).padStart(2,'0') + ':' + String(secs).padStart(2,'0');
+      const pct = (timeLeft / TOTAL_SECONDS) * 100;
+      fill.style.width = pct + '%';
+      display.className = 'timer-display';
+      fill.className = 'timer-progress-fill';
+      if (timeLeft <= 300) { display.classList.add('danger'); fill.classList.add('warning'); }
+      else if (timeLeft <= 600) { display.classList.add('warning'); fill.classList.add('warning'); }
+    }
+
+    function autoSubmit() {
+      questions.forEach((q, i) => {
+        const opts = document.getElementById('opts-' + i);
+        if (!opts.dataset.answered) {
+          opts.dataset.answered = '1';
+          const allOpts = opts.querySelectorAll('.option');
+          allOpts.forEach(o => o.classList.add('disabled'));
+          allOpts[q.answer].classList.add('correct');
+        }
+      });
+      setTimeout(showResult, 600);
+    }
+    const total = questions.length;
+
+    function buildQuiz() {
+      const area = document.getElementById('quizArea');
+      area.innerHTML = '';
+      questions.forEach((q, i) => {
+        const letters = ['A','B','C','D','E'];
+        const card = document.createElement('div');
+        card.className = 'question-card';
+        card.style.animationDelay = (i * 0.03) + 's';
+        card.innerHTML = `
+          <div class="q-number">Question ${i+1} of ${total}</div>
+          <div class="q-text">${i+1}. ${q.q}</div>
+          <div class="options" id="opts-${i}">
+            ${q.options.map((opt, j) => `
+              <div class="option" id="opt-${i}-${j}" onclick="selectAnswer(${i}, ${j})">
+                <div class="option-letter">${letters[j]}</div>
+                <span>${opt}</span>
+              </div>
+            `).join('')}
+          </div>
+        `;
+        area.appendChild(card);
+      });
+    }
+
+    function selectAnswer(qIndex, optIndex) {
+      const q = questions[qIndex];
+      const opts = document.getElementById('opts-' + qIndex);
+      if (opts.dataset.answered) return;
+      opts.dataset.answered = '1';
+      answered++;
+
+      const allOpts = opts.querySelectorAll('.option');
+      allOpts.forEach(o => o.classList.add('disabled'));
+
+      if (optIndex === q.answer) {
+        allOpts[optIndex].classList.add('correct');
+        correct++;
+      } else {
+        allOpts[optIndex].classList.add('wrong');
+        allOpts[q.answer].classList.add('correct');
+        wrong++;
+      }
+
+      updateScore();
+
+      if (answered === total) {
+        setTimeout(showResult, 800);
+      }
+    }
+
+    function updateScore() {
+      document.getElementById('scoreTotal').textContent = correct;
+      document.getElementById('scoreCorrect').textContent = correct;
+      document.getElementById('scoreWrong').textContent = wrong;
+      document.getElementById('scoreRemaining').textContent = total - answered;
+      const pct = (answered / total) * 100;
+      document.getElementById('progressFill').style.width = pct + '%';
+    }
+
+    function showResult() {
+      document.getElementById('quizArea').style.display = 'none';
+      const panel = document.getElementById('resultPanel');
+      panel.style.display = 'block';
+      const accuracy = Math.round((correct / total) * 100);
+      document.getElementById('rScore').textContent = correct + '/' + total;
+      document.getElementById('rCorrect').textContent = correct;
+      document.getElementById('rWrong').textContent = wrong;
+      document.getElementById('rAccuracy').textContent = accuracy + '%';
+      const emoji = accuracy >= 80 ? '🏆' : accuracy >= 60 ? '👍' : accuracy >= 40 ? '📚' : '💪';
+      const title = accuracy >= 80 ? 'Excellent!' : accuracy >= 60 ? 'Good Job!' : accuracy >= 40 ? 'Keep Studying!' : 'Keep Practicing!';
+      document.getElementById('resultEmoji').textContent = emoji;
+      document.getElementById('resultTitle').innerHTML = title;
+      document.getElementById('resultSub').textContent = `You scored ${correct} out of ${total} — Accuracy: ${accuracy}%`;
+    }
+
+    function restartQuiz() {
+      clearInterval(timerInterval);
+      timeLeft = TOTAL_SECONDS;
+      updateTimerDisplay();
+      correct = 0; wrong = 0; answered = 0;
+      document.getElementById('resultPanel').style.display = 'none';
+      document.getElementById('quizArea').style.display = 'block';
+      updateScore();
+      buildQuiz();
+    startTimer();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    buildQuiz();
+    startTimer();
+  </script>
+</body>
+</html>
