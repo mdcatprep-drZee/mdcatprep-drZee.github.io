@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Biology | Biological Molecules & Enzymes — UHS Past Papers | MDCAT Prep by Dr. Zee</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a0f1e; --surface: #111827; --card: #151e2e;
+      --border: rgba(255,255,255,0.07); --accent: #5cf7b0;
+      --accent2: #4f8ef7; --text: #e8edf5; --muted: #7a8599;
+      --correct: #5cf7b0; --wrong: #f75c5c;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+    body::before { content: ''; position: fixed; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; z-index: 0; }
+    .orb { position: fixed; border-radius: 50%; filter: blur(90px); opacity: 0.18; pointer-events: none; z-index: 0; }
+    .orb1 { width: 350px; height: 350px; background: var(--accent); top: -80px; right: -80px; }
+    .orb2 { width: 280px; height: 280px; background: var(--accent2); bottom: -60px; left: -60px; }
+    header { position: sticky; top: 0; z-index: 10; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); backdrop-filter: blur(12px); background: rgba(10,15,30,0.75); }
+    .back-btn { display: flex; align-items: center; gap: 6px; text-decoration: none; color: var(--muted); font-size: 0.82rem; font-weight: 500; transition: color 0.2s; }
+    .back-btn:hover { color: var(--text); }
+    .header-badge { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; background: rgba(92,247,176,0.12); border: 1px solid rgba(92,247,176,0.25); color: var(--accent); padding: 4px 12px; border-radius: 20px; }
+    .hero { position: relative; z-index: 1; padding: 36px 20px 24px; text-align: center; }
+    .chapter-tag { display: inline-flex; align-items: center; gap: 6px; background: rgba(92,247,176,0.08); border: 1px solid rgba(92,247,176,0.2); color: var(--accent); font-size: 0.75rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; padding: 5px 14px; border-radius: 20px; margin-bottom: 14px; }
+    .hero h1 { font-family: 'Syne', sans-serif; font-size: clamp(1.3rem, 4vw, 2.2rem); font-weight: 800; line-height: 1.15; margin-bottom: 8px; }
+    .hero h1 span { background: linear-gradient(90deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero p { color: var(--muted); font-size: 0.83rem; margin-bottom: 20px; }
+    .year-badges { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+    .year-badge { background: rgba(79,142,247,0.1); border: 1px solid rgba(79,142,247,0.25); color: var(--accent2); font-size: 0.7rem; font-weight: 700; padding: 3px 10px; border-radius: 12px; }
+    .scoreboard { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+    .score-box { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 10px 16px; text-align: center; min-width: 70px; }
+    .score-num { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.3rem; }
+    .score-num.s { color: var(--accent2); } .score-num.c { color: var(--correct); } .score-num.w { color: var(--wrong); } .score-num.r { color: var(--muted); }
+    .score-label { font-size: 0.65rem; color: var(--muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .timer-wrap { position: relative; z-index: 1; max-width: 700px; margin: 14px auto 0; padding: 0 16px; }
+    .timer-box { display: flex; align-items: center; justify-content: space-between; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 11px 16px; }
+    .timer-display { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.3rem; color: var(--accent); transition: color 0.3s; }
+    .timer-display.warning { color: #f7a14f; } .timer-display.danger { color: var(--wrong); animation: pulse 1s infinite; }
+    .t-label { font-size: 0.68rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+    .timer-bar { height: 4px; background: var(--surface); border-radius: 10px; overflow: hidden; margin-top: 7px; }
+    .timer-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 10px; transition: width 1s linear; width: 100%; }
+    .timer-fill.warn { background: linear-gradient(90deg, #f7a14f, #f75c5c); }
+    .progress-wrap { position: relative; z-index: 1; max-width: 700px; margin: 10px auto 0; padding: 0 16px; }
+    .progress-bar { height: 3px; background: var(--surface); border-radius: 10px; overflow: hidden; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 10px; transition: width 0.4s ease; width: 0%; }
+    .quiz-area { position: relative; z-index: 1; max-width: 700px; margin: 20px auto 60px; padding: 0 14px; }
+    .year-divider { text-align: center; margin: 20px 0 14px; }
+    .year-divider span { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #0a0f1e; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 0.82rem; padding: 5px 18px; border-radius: 20px; letter-spacing: 0.05em; }
+    .question-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 12px; animation: fadeUp 0.3s ease both; }
+    .q-number { font-size: 0.68rem; color: var(--muted); font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 7px; }
+    .q-text { font-size: 0.93rem; font-weight: 500; line-height: 1.6; color: var(--text); margin-bottom: 14px; }
+    .options { display: flex; flex-direction: column; gap: 6px; }
+    .option { display: flex; align-items: center; gap: 10px; background: var(--surface); border: 1px solid var(--border); border-radius: 9px; padding: 9px 12px; cursor: pointer; transition: border-color 0.18s, background 0.18s, transform 0.1s; font-size: 0.85rem; color: var(--text); }
+    .option:hover:not(.disabled) { border-color: rgba(92,247,176,0.35); background: rgba(92,247,176,0.05); transform: translateX(2px); }
+    .option-letter { width: 23px; height: 23px; border-radius: 6px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.7rem; flex-shrink: 0; }
+    .option.correct { border-color: var(--correct); background: rgba(92,247,176,0.08); }
+    .option.correct .option-letter { background: var(--correct); color: #0a0f1e; border-color: var(--correct); }
+    .option.wrong { border-color: var(--wrong); background: rgba(247,92,92,0.08); }
+    .option.wrong .option-letter { background: var(--wrong); color: #fff; border-color: var(--wrong); }
+    .option.disabled { cursor: default; }
+    #resultPanel { display: none; position: relative; z-index: 1; max-width: 700px; margin: 40px auto 60px; padding: 0 16px; text-align: center; }
+    .result-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 32px 22px; }
+    .result-emoji { font-size: 2.8rem; margin-bottom: 10px; }
+    .result-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.4rem; margin-bottom: 5px; }
+    .result-title span { background: linear-gradient(90deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .result-sub { color: var(--muted); font-size: 0.83rem; margin-bottom: 22px; }
+    .result-stats { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 22px; }
+    .result-stat { background: var(--surface); border: 1px solid var(--border); border-radius: 11px; padding: 11px 16px; min-width: 85px; }
+    .result-stat-num { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.4rem; }
+    .result-stat-label { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 2px; }
+    .restart-btn { display: inline-block; background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #0a0f1e; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.88rem; padding: 11px 26px; border-radius: 11px; border: none; cursor: pointer; margin-right: 8px; transition: opacity 0.2s; }
+    .home-btn { display: inline-block; background: var(--surface); color: var(--text); font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.88rem; padding: 11px 26px; border-radius: 11px; border: 1px solid var(--border); cursor: pointer; text-decoration: none; }
+    footer { position: relative; z-index: 1; text-align: center; padding: 22px; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.75rem; }
+    footer strong { color: var(--accent); }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+  </style>
+</head>
+<body>
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+
+  <header>
+    <a href="index.html" class="back-btn">← Back to Home</a>
+    <div class="header-badge">🧬 Biology</div>
+  </header>
+
+  <section class="hero">
+    <div class="chapter-tag">🧬 Biological Molecules & Enzymes</div>
+    <h1>UHS <span>Past Papers</span></h1>
+    <div class="year-badges">
+      <span class="year-badge">2011</span>
+      <span class="year-badge">2012</span>
+      <span class="year-badge">2013</span>
+      <span class="year-badge">2014</span>
+      <span class="year-badge">2015</span>
+      <span class="year-badge">2016</span>
+    </div>
+    <p>54 MCQs — Attempt all questions and track your score</p>
+    <div class="scoreboard">
+      <div class="score-box"><div class="score-num s" id="scoreTotal">0</div><div class="score-label">Score</div></div>
+      <div class="score-box"><div class="score-num c" id="scoreCorrect">0</div><div class="score-label">Correct</div></div>
+      <div class="score-box"><div class="score-num w" id="scoreWrong">0</div><div class="score-label">Wrong</div></div>
+      <div class="score-box"><div class="score-num r" id="scoreRemaining">54</div><div class="score-label">Remaining</div></div>
+    </div>
+  </section>
+
+  <div class="timer-wrap">
+    <div class="timer-box">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div>⏱️</div>
+        <div><div class="t-label">Time Remaining</div><div class="timer-display" id="timerDisplay">54:00</div></div>
+      </div>
+      <div style="text-align:right"><div class="t-label">Total Time</div><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.85rem;color:var(--muted)">54 mins</div></div>
+    </div>
+    <div class="timer-bar"><div class="timer-fill" id="timerFill"></div></div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+
+  <div class="quiz-area" id="quizArea"></div>
+
+  <div id="resultPanel">
+    <div class="result-card">
+      <div class="result-emoji" id="resultEmoji">🎉</div>
+      <div class="result-title"><span id="resultTitle">Quiz Complete!</span></div>
+      <div class="result-sub" id="resultSub"></div>
+      <div class="result-stats">
+        <div class="result-stat"><div class="result-stat-num" id="rScore" style="color:var(--accent2)">0</div><div class="result-stat-label">Final Score</div></div>
+        <div class="result-stat"><div class="result-stat-num" id="rCorrect" style="color:var(--correct)">0</div><div class="result-stat-label">Correct</div></div>
+        <div class="result-stat"><div class="result-stat-num" id="rWrong" style="color:var(--wrong)">0</div><div class="result-stat-label">Wrong</div></div>
+        <div class="result-stat"><div class="result-stat-num" id="rAccuracy" style="color:var(--accent)">0%</div><div class="result-stat-label">Accuracy</div></div>
+      </div>
+      <button class="restart-btn" onclick="restartQuiz()">↻ Restart</button>
+      <a href="index.html" class="home-btn">🏠 Home</a>
+    </div>
+  </div>
+
+  <footer>Made with ❤️ by <strong>Dr. Zee</strong> &nbsp;·&nbsp; MDCAT Prep 2025 &nbsp;·&nbsp; UHS Past Papers</footer>
+
+  <script>
+    // year: for divider display, answer index (0=A,1=B,2=C,3=D)
+    const questions = [
+      // 2011
+      { year:"2011", q:"The covalent bond formed between two monosaccharides is called", options:["Glycosidic Bond","Hydrogen Bond","Peptide Bond","Disulphide"], answer:0 },
+      { year:"2011", q:"The bond formed between glucose and fructose form sucrose is", options:["1,4 Glycosidic Linkage","1,2 Glycosidic Linkage","1,6 Glycosidic Linkage","1,3 Glycosidic Linkage"], answer:1 },
+      { year:"2011", q:"In an amino acid in which the R-group is H, its name will be", options:["Alanine","Glycine","Leucine","Valine"], answer:1 },
+      { year:"2011", q:"Fatty acid are the organic compounds containing hydrogen, oxygen and one of the following are", options:["-COOH","-NH2","Acyl","Sacrose"], answer:0 },
+      { year:"2011", q:"The combination of a pentose sugar with a base result in a compound is known as", options:["Nucleotide","Nucleoside","Nucleic Acid","Polynucleotide"], answer:1 },
+      { year:"2011", q:"An enzyme and substrate reacts through a special feature or site present in enzyme:", options:["Building Site","Active Site","Catalyst Site","Inhibition Site"], answer:1 },
+      { year:"2011", q:"The non-protein part of enzyme which is covalently and permanently bonded is called", options:["Prosthetic Group","Co-Factor","Co-Enzyme","Activator"], answer:0 },
+      { year:"2011", q:"One of the pyrimidine bases is absent in DNA", options:["Uracil","Thymine","Cytosine","Adenine"], answer:0 },
+      { year:"2011", q:"Enzymes increase the rate of reaction by", options:["Increasing Temperature","Decreasing pH","Decreasing Activation Energy","Increasing Activation Energy"], answer:2 },
+      // 2012
+      { year:"2012", q:"Carbohydrates are organic molecules and contain three elements", options:["Carbon, water and oxygen","Carbon, Sulphur and hydrogen","Carbon, calcium and hydrogen","Carbon, hydrogen and oxygen"], answer:3 },
+      { year:"2012", q:"Which one are intermediates in respiration and photosynthesis both?", options:["Ribose and heptolose","Glyceraldehydes and dihydroxyacetone","Glucose and galactose","Fructose and ribulose"], answer:1 },
+      { year:"2012", q:"Which of the following is a peptide bond?", options:["-C-N","-C-O","-C-P","-C-S"], answer:0 },
+      { year:"2012", q:"Which of the following is an unsaturated fatty acid?", options:["Acetic Acid","Butyric acid","Oleic acid","Palmitic acid"], answer:2 },
+      { year:"2012", q:"Which of the following combination of base pair is absent in DNA?", options:["A-T","C-G","A-U","T-A"], answer:2 },
+      { year:"2012", q:"The type of inhibition in which inhibitor has no structural similarity to substrate and combines with enzyme at other than the active site is called", options:["Irreversible inhibition","Competitive inhibition","Non-competitive and reversible inhibition","Reversible inhibition"], answer:2 },
+      { year:"2012", q:"The inhibitors that bind tightly and permanently to enzymes and destroy their globular structure and catalytic activity are", options:["Reversible inhibitors","Irreversible inhibitors","Competitive inhibitors","Non-competitive inhibitors"], answer:1 },
+      { year:"2012", q:"Enzyme succinate dehydrogenase converts succinate into", options:["Malate","Malonic acid","Citrate","Fumarate"], answer:3 },
+      { year:"2012", q:"If the detachable co-factor is an inorganic ion then it is designated as", options:["Coenzyme","Prosthetic group","Holoenzyme","Activator"], answer:3 },
+      // 2013
+      { year:"2013", q:"_________ is most abundant carbohydrate in nature.", options:["Waxes","Glycerol","Starch","Cellulose"], answer:3 },
+      { year:"2013", q:"Which of the following is a keto sugar:", options:["Glyceraldehyde","Dihydroxy-acetone","Ribose","Glucose"], answer:1 },
+      { year:"2013", q:"Amino acid in which the R-group is hydrogen is:", options:["Glycine","Alanine","Leucine","Valine"], answer:0 },
+      { year:"2013", q:"Acyl-glycerols like fats and oils are esters formed by condensation reaction between:", options:["Fatty acids and water","Fatty acids and alcohols","Fatty acids and glucose","Fatty acids and phosphates"], answer:1 },
+      { year:"2013", q:"Which of the following is purine:", options:["Guanine","Cytosine","Thymine","Uracil"], answer:0 },
+      { year:"2013", q:"If the co-factor is covalently or tightly and permanently bonded to enzyme then it will be called:", options:["Coenzyme","Prosthetic group","Activator","Apoenzyme"], answer:1 },
+      { year:"2013", q:"Optimum pH value for the working of pancreatic lipase is:", options:["4.50","7.60","2.00","9.00"], answer:3 },
+      { year:"2013", q:"The view that active site of an enzyme is flexible and when a substrate combines with it cause changes in enzyme structure is known as:", options:["Lock & key model","Induce fit model","Sliding filament model","Specificity model"], answer:1 },
+      { year:"2013", q:"All coenzymes are derived from:", options:["Proteins","Nucleic acids","Carbohydrate","Vitamins"], answer:3 },
+      // 2014
+      { year:"2014", q:"The most common respiratory substrate as a source of energy is", options:["Glucose","Sucrose","Fructose","Insulin"], answer:0 },
+      { year:"2014", q:"The simplest monosaccharide containing keto group is", options:["Glyceraldehyde","Dihydroxy acetone","Glucose","Ribose"], answer:1 },
+      { year:"2014", q:"If the genetic code is made up of three nucleotides, then total possible genetic codes will be", options:["4","20","64","61"], answer:2 },
+      { year:"2014", q:"Waterproof surfaces like cuticle of leaf and protective covering of an insect's body are", options:["Phospholipids","Waxes","Terpenoids","Acyl glycerols"], answer:1 },
+      { year:"2014", q:"In translation the terminating codon is", options:["GUA","UAA","UAG","AGU"], answer:1 },
+      { year:"2014", q:"All co-enzymes are derived from", options:["Proteins","Carbohydrates","Metal ions","Vitamins"], answer:3 },
+      { year:"2014", q:"The competitive inhibitors have structural similarity with", options:["Active site","Binding site","Substrate","Co-enzyme"], answer:2 },
+      { year:"2014", q:"Which one of the following is the optimum pH of pancreatic lipase enzyme?", options:["7.60","8.00","9.00","9.70"], answer:2 },
+      { year:"2014", q:"A co-factor tightly bound to the enzyme on the permanent basis is called", options:["Activator","Co-enzyme","Prosthetic group","Apo-enzyme"], answer:2 },
+      // 2015
+      { year:"2015", q:"Monosaccharides are major components of:", options:["DNA, ATP, Ribulose bisphosphate and Cysteine","DNA, NAD and Insulin","DNA, NADP, ATP and Ribulose bisphosphate","DNA, RNA and Myosin"], answer:2 },
+      { year:"2015", q:"Blood group antigen contains:", options:["Glycoproteins","Phospholipids","Glycolipids","Sphingolipids"], answer:0 },
+      { year:"2015", q:"Myosin is a _________ type of protein.", options:["Intermediate","Simple","Globular","Fibrous"], answer:3 },
+      { year:"2015", q:"Which one of the following is an example of unsaturated fatty acid?", options:["Butyric Acid","Oleic Acid","Palmitic Acid","Acetic Acid"], answer:1 },
+      { year:"2015", q:"Number of base pairs in one turn of DNA is:", options:["10","2","34","54"], answer:0 },
+      { year:"2015", q:"Which molecular structure of enzyme is essential for activity of enzyme?", options:["Primary Structure","Quaternary Structure","Secondary Structure","Tertiary Structure"], answer:3 },
+      { year:"2015", q:"Some enzymes require helper which is non-protein part for its efficient functioning that is called:", options:["Accelerator","Cofactor","Prosthetic group","Apoenzyme"], answer:1 },
+      { year:"2015", q:"Pepsin, protein digesting enzymes, sets best pH:", options:["3.00","4.50","2.00","6.00"], answer:0 },
+      { year:"2015", q:"Which one of the following is an example of competitive inhibitor?", options:["Glucose","Fumerate","Succinic Acid","Melonate"], answer:3 },
+      // 2016
+      { year:"2016", q:"The compounds which on hydrolysis yield polyhydroxy aldehyde or ketone subunits are:", options:["Lipids","Proteins","Polynucleotides","Carbohydrates"], answer:3 },
+      { year:"2016", q:"Which one of the following is the formula structure of D(a) glucose?", options:["Structure A","Structure B","Structure C","Structure D"], answer:3 },
+      { year:"2016", q:"Secondary structure of protein is found in:", options:["Trypsin","Keratin","Insulin","Glucagon"], answer:1 },
+      { year:"2016", q:"Waxes are formed by combination of fatty acids with:", options:["Alcohol","Glycerol","Serine","Cysteine"], answer:0 },
+      { year:"2016", q:"Phosphodiester bond is:", options:["P-O-C-P-O-C","C-O-P","C-O-P-O-C","C-C-O-P"], answer:2 },
+      { year:"2016", q:"An enzyme required Mg++ to catalyze the substrate. The Mg++ is best identified as:", options:["Prosthetic group","Activator","Co-enzyme","Inhibitor"], answer:1 },
+      { year:"2016", q:"This figure represents _________ inhibitor. (Inhibitor binds away from active site)", options:["Non-competitive","Competitive","Irreversible","Isosteric"], answer:0 },
+      { year:"2016", q:"According to _________ model the active site of enzyme is modified as the substrate interacts with enzyme.", options:["Induced fit","Lock and Key","Emil Fischer","Fluid Mosaic"], answer:0 },
+      { year:"2016", q:"Which one of the following graphs shows how the rate of reaction of pepsin is affected by pH?", options:["Graph A (peak at pH 2)","Graph B","Graph C","Graph D"], answer:3 },
+    ];
+
+    // Answer key from image: Q1-A,Q2-B,Q3-B,Q4-A,Q5-B,Q6-B,Q7-A,Q8-A,Q9-C,Q10-D,Q11-B,Q12-A,Q13-C,Q14-C,Q15-C,Q16-B,Q17-D,Q18-D,Q19-D,Q20-B,Q21-A,Q22-B,Q23-A,Q24-B,Q25-D,Q26-B,Q27-D,Q28-A,Q29-B,Q30-C,Q31-B,Q32-B,Q33-D,Q34-C,Q35-C,Q36-C,Q37-C,Q38-A,Q39-D,Q40-B,Q41-A,Q42-D,Q43-B,Q44-C,Q45-D,Q46-D,Q47-A,Q48-B,Q49-A,Q50-C,Q51-B,Q52-A,Q53-A,Q54-D
+    const answerKey = [0,1,1,0,1,1,0,0,2,3,1,0,2,2,2,1,3,3,3,1,0,1,0,1,3,1,3,0,1,2,1,1,3,2,2,2,2,0,3,1,0,3,1,2,3,3,0,1,0,2,1,0,0,3];
+    // Override answers from answer key
+    answerKey.forEach((ans, i) => { if(questions[i]) questions[i].answer = ans; });
+
+    let correct = 0, wrong = 0, answered = 0;
+    const total = questions.length;
+    const TOTAL_SECONDS = 54 * 60;
+    let timeLeft = TOTAL_SECONDS;
+    let timerInterval = null;
+
+    function startTimer() {
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        if (timeLeft <= 0) { clearInterval(timerInterval); autoSubmit(); }
+      }, 1000);
+    }
+
+    function updateTimerDisplay() {
+      const mins = Math.floor(timeLeft / 60);
+      const secs = timeLeft % 60;
+      const d = document.getElementById('timerDisplay');
+      const f = document.getElementById('timerFill');
+      d.textContent = String(mins).padStart(2,'0') + ':' + String(secs).padStart(2,'0');
+      f.style.width = ((timeLeft / TOTAL_SECONDS) * 100) + '%';
+      d.className = 'timer-display';
+      f.className = 'timer-fill';
+      if (timeLeft <= 300) { d.classList.add('danger'); f.classList.add('warn'); }
+      else if (timeLeft <= 600) { d.classList.add('warning'); f.classList.add('warn'); }
+    }
+
+    function autoSubmit() {
+      questions.forEach((q, i) => {
+        const opts = document.getElementById('opts-' + i);
+        if (!opts.dataset.answered) {
+          opts.dataset.answered = '1';
+          opts.querySelectorAll('.option').forEach(o => o.classList.add('disabled'));
+          opts.querySelectorAll('.option')[q.answer].classList.add('correct');
+        }
+      });
+      setTimeout(showResult, 600);
+    }
+
+    function buildQuiz() {
+      const area = document.getElementById('quizArea');
+      area.innerHTML = '';
+      let currentYear = '';
+      questions.forEach((q, i) => {
+        if (q.year !== currentYear) {
+          currentYear = q.year;
+          const div = document.createElement('div');
+          div.className = 'year-divider';
+          div.innerHTML = `<span>📅 UHS ${q.year}</span>`;
+          area.appendChild(div);
+        }
+        const letters = ['A','B','C','D'];
+        const card = document.createElement('div');
+        card.className = 'question-card';
+        card.style.animationDelay = (i * 0.015) + 's';
+        card.innerHTML = `
+          <div class="q-number">Question ${i+1} of ${total}</div>
+          <div class="q-text">${i+1}. ${q.q}</div>
+          <div class="options" id="opts-${i}">
+            ${q.options.map((opt, j) => `
+              <div class="option" onclick="selectAnswer(${i}, ${j})">
+                <div class="option-letter">${letters[j]}</div>
+                <span>${opt}</span>
+              </div>
+            `).join('')}
+          </div>
+        `;
+        area.appendChild(card);
+      });
+    }
+
+    function selectAnswer(qIndex, optIndex) {
+      const q = questions[qIndex];
+      const opts = document.getElementById('opts-' + qIndex);
+      if (opts.dataset.answered) return;
+      opts.dataset.answered = '1';
+      answered++;
+      const allOpts = opts.querySelectorAll('.option');
+      allOpts.forEach(o => o.classList.add('disabled'));
+      if (optIndex === q.answer) { allOpts[optIndex].classList.add('correct'); correct++; }
+      else { allOpts[optIndex].classList.add('wrong'); allOpts[q.answer].classList.add('correct'); wrong++; }
+      updateScore();
+      if (answered === total) setTimeout(showResult, 800);
+    }
+
+    function updateScore() {
+      document.getElementById('scoreTotal').textContent = correct;
+      document.getElementById('scoreCorrect').textContent = correct;
+      document.getElementById('scoreWrong').textContent = wrong;
+      document.getElementById('scoreRemaining').textContent = total - answered;
+      document.getElementById('progressFill').style.width = ((answered / total) * 100) + '%';
+    }
+
+    function showResult() {
+      clearInterval(timerInterval);
+      document.getElementById('quizArea').style.display = 'none';
+      document.getElementById('resultPanel').style.display = 'block';
+      const accuracy = Math.round((correct / total) * 100);
+      document.getElementById('rScore').textContent = correct + '/' + total;
+      document.getElementById('rCorrect').textContent = correct;
+      document.getElementById('rWrong').textContent = wrong;
+      document.getElementById('rAccuracy').textContent = accuracy + '%';
+      const emoji = accuracy >= 80 ? '🏆' : accuracy >= 60 ? '👍' : accuracy >= 40 ? '📚' : '💪';
+      const title = accuracy >= 80 ? 'Excellent!' : accuracy >= 60 ? 'Good Job!' : accuracy >= 40 ? 'Keep Studying!' : 'Keep Practicing!';
+      document.getElementById('resultEmoji').textContent = emoji;
+      document.getElementById('resultTitle').textContent = title;
+      document.getElementById('resultSub').textContent = `You scored ${correct} out of ${total} — Accuracy: ${accuracy}%`;
+    }
+
+    function restartQuiz() {
+      clearInterval(timerInterval);
+      correct = 0; wrong = 0; answered = 0;
+      timeLeft = TOTAL_SECONDS;
+      updateTimerDisplay();
+      document.getElementById('resultPanel').style.display = 'none';
+      document.getElementById('quizArea').style.display = 'block';
+      updateScore();
+      buildQuiz();
+      startTimer();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    buildQuiz();
+    startTimer();
+  </script>
+</body>
+</html>
