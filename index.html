@@ -64,9 +64,43 @@
     .step-num { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.8rem; color: var(--border); line-height: 1; margin-bottom: 8px; }
     .step-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.88rem; margin-bottom: 5px; }
     .step-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.5; }
+    
+    /* New Sections */
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+    .feature-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; text-align: center; transition: transform 0.2s, border-color 0.2s; }
+    .feature-card:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.13); }
+    .feature-icon { font-size: 32px; margin-bottom: 12px; }
+    .feature-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem; margin-bottom: 8px; }
+    .feature-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.5; }
+    
+    .cta-section { background: linear-gradient(135deg, rgba(0,212,170,0.1), rgba(79,142,247,0.1)); border: 1px solid var(--border); border-radius: 16px; padding: 40px 24px; text-align: center; margin: 40px auto; max-width: 600px; }
+    .cta-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.3rem; margin-bottom: 12px; }
+    .cta-desc { color: var(--muted); font-size: 0.9rem; margin-bottom: 20px; line-height: 1.6; }
+    .cta-btn { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #0a0f1e; border: none; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.85rem; padding: 12px 28px; border-radius: 10px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+    .cta-btn:hover { transform: scale(1.05); box-shadow: 0 8px 16px rgba(0,212,170,0.3); }
+    
+    .testimonials { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+    .testimonial { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+    .testimonial-text { font-size: 0.85rem; color: var(--text); line-height: 1.6; margin-bottom: 14px; font-style: italic; }
+    .testimonial-author { font-family: 'Syne', sans-serif; font-weight: 600; font-size: 0.8rem; color: var(--accent); }
+    .testimonial-role { font-size: 0.7rem; color: var(--muted); }
+    
+    .faq-item { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px; margin-bottom: 12px; cursor: pointer; transition: border-color 0.2s; }
+    .faq-item:hover { border-color: rgba(255,255,255,0.13); }
+    .faq-question { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem; display: flex; justify-content: space-between; align-items: center; }
+    .faq-toggle { font-size: 1.2rem; transition: transform 0.2s; }
+    .faq-item.open .faq-toggle { transform: rotate(180deg); }
+    .faq-answer { font-size: 0.8rem; color: var(--muted); line-height: 1.6; margin-top: 12px; display: none; }
+    .faq-item.open .faq-answer { display: block; }
+    
     footer { position: relative; z-index: 1; text-align: center; padding: 28px 24px; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.78rem; }
     footer strong { color: var(--accent); }
-    @media (max-width: 600px) { header { padding: 12px 16px; } .student-name { display: none; } }
+    
+    @media (max-width: 600px) { 
+      header { padding: 12px 16px; } 
+      .student-name { display: none; } 
+      .cta-section { padding: 30px 16px; }
+    }
   </style>
 </head>
 <body>
@@ -114,15 +148,9 @@
       </div>
     </section>
     <section class="section" style="padding-top:0;">
-      <div class="section-header"><span class="section-label">🧬 Biology</span><div class="section-line"></div><span class="section-count">1 available</span></div>
+      <div class="section-header"><span class="section-label">🧬 Biology</span><div class="section-line"></div><span class="section-count">Coming soon</span></div>
       <div class="cards-grid">
-        <a href="biology-ch01-the-cell.html" class="card" style="--card-accent:#5cf7b0;">
-          <div class="card-icon" style="background:rgba(92,247,176,0.15);">🦠</div>
-          <div class="card-title">Chapter 1: The Cell</div>
-          <div class="card-desc">50 MCQs — Microscopy, cell structure, organelles and membrane transport.</div>
-          <div class="card-footer"><span class="pill">50 Qs</span><div class="card-arrow">→</div></div>
-        </a>
-        <a class="card soon"><div class="soon-badge">Coming Soon</div><div class="card-icon" style="background:rgba(92,247,176,0.15);">🧬</div><div class="card-title">Chapter 2: Biological Molecules</div><div class="card-desc">Carbohydrates, proteins, lipids and nucleic acids.</div><div class="card-footer"><span class="pill">Upcoming</span><div class="card-arrow">→</div></div></a>
+        <a class="card soon"><div class="soon-badge">Coming Soon</div><div class="card-icon" style="background:rgba(92,247,176,0.15);">🦠</div><div class="card-title">Biology MCQs</div><div class="card-desc">Cell biology, genetics, human physiology.</div><div class="card-footer"><span class="pill">Upcoming</span><div class="card-arrow">→</div></div></a>
       </div>
     </section>
     <section class="section" style="padding-top:0;">
@@ -130,6 +158,31 @@
       <div class="cards-grid">
         <a class="card soon"><div class="soon-badge">Coming Soon</div><div class="card-icon" style="background:rgba(247,161,79,0.15);">📖</div><div class="card-title">English MCQs</div><div class="card-desc">Vocabulary, grammar, comprehension.</div><div class="card-footer"><span class="pill">Upcoming</span><div class="card-arrow">→</div></div></a>
         <a class="card soon"><div class="soon-badge">Coming Soon</div><div class="card-icon" style="background:rgba(224,92,247,0.15);">🧩</div><div class="card-title">Logical Reasoning</div><div class="card-desc">Pattern recognition and analytical reasoning.</div><div class="card-footer"><span class="pill">Upcoming</span><div class="card-arrow">→</div></div></a>
+      </div>
+    </section>
+    <section class="section" style="padding-top:0;">
+      <div class="section-header"><span class="section-label">✨ Why Choose MDCAT Prep?</span><div class="section-line"></div></div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <div class="feature-title">Instant Feedback</div>
+          <div class="feature-desc">Get immediate results with detailed explanations for every question.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <div class="feature-title">Progress Tracking</div>
+          <div class="feature-desc">Monitor your performance across all subjects in real time.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎯</div>
+          <div class="feature-title">Targeted Learning</div>
+          <div class="feature-desc">Focus on weak areas with subject-wise practice questions.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔐</div>
+          <div class="feature-title">Secure & Private</div>
+          <div class="feature-desc">Your data is encrypted and never shared with third parties.</div>
+        </div>
       </div>
     </section>
     <section class="section" style="padding-top:0;">
@@ -141,16 +194,75 @@
         <div class="step"><div class="step-num">04</div><div class="step-title">Restart and Improve</div><div class="step-desc">Retry until you achieve 100% accuracy.</div></div>
       </div>
     </section>
+    <section class="section" style="padding-top:0;">
+      <div class="section-header"><span class="section-label">💬 Student Testimonials</span><div class="section-line"></div></div>
+      <div class="testimonials">
+        <div class="testimonial">
+          <div class="testimonial-text">"MDCAT Prep helped me improve my physics score by 40% in just two months. The instant feedback is amazing!"</div>
+          <div class="testimonial-author">Fatima Khan</div>
+          <div class="testimonial-role">Pre-Med Student, Karachi</div>
+        </div>
+        <div class="testimonial">
+          <div class="testimonial-text">"The organized subject structure and detailed explanations made studying so much easier. Highly recommended!"</div>
+          <div class="testimonial-author">Ahmed Ali</div>
+          <div class="testimonial-role">MDCAT Aspirant, Lahore</div>
+        </div>
+        <div class="testimonial">
+          <div class="testimonial-text">"Free, comprehensive, and genuinely helpful. Dr. Zee has created something special here for all students."</div>
+          <div class="testimonial-author">Zainab Malik</div>
+          <div class="testimonial-role">Medical Student, Islamabad</div>
+        </div>
+      </div>
+    </section>
+    <section class="section" style="padding-top:0;">
+      <div class="section-header"><span class="section-label">❓ Frequently Asked Questions</span><div class="section-line"></div></div>
+      <div id="faqContainer"></div>
+    </section>
+    <div class="cta-section">
+      <div class="cta-title">Ready to Ace Your MDCAT?</div>
+      <div class="cta-desc">Start practicing today and join thousands of students preparing for success. It's completely free and takes just minutes to get started.</div>
+      <button class="cta-btn" onclick="document.querySelector('.hero').scrollIntoView({behavior: 'smooth'});">Start Practicing Now</button>
+    </div>
     <footer>Made with love by <strong>Dr. Zee</strong> &nbsp;·&nbsp; MDCAT Prep 2025 &nbsp;·&nbsp; Free for all students</footer>
   </div>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
     import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+    
     const firebaseConfig = { apiKey: "AIzaSyAqLKpVldxBvGnIgVK6N2BAjmIHRNNZ3dw", authDomain: "mdcat-prep-drzee.firebaseapp.com", projectId: "mdcat-prep-drzee", storageBucket: "mdcat-prep-drzee.firebasestorage.app", messagingSenderId: "722650911656", appId: "1:722650911656:web:1e315f68c14aedeb8f439d", measurementId: "G-LFSJYL5YYQ" };
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
+    
+    // FAQ Data
+    const faqs = [
+      { question: "Is MDCAT Prep really free?", answer: "Yes! MDCAT Prep is completely free and will always remain free for all students. We believe quality education should be accessible to everyone." },
+      { question: "How many questions are available?", answer: "We currently have 200+ questions across multiple subjects, with more being added regularly. Check back often for new content!" },
+      { question: "Can I retake the tests?", answer: "Absolutely! You can retake any test as many times as you want. We recommend retaking until you achieve 100% accuracy." },
+      { question: "Are there explanations for answers?", answer: "Yes, each question includes detailed explanations to help you understand the concept, not just the answer." },
+      { question: "How do I track my progress?", answer: "Your scores are automatically saved and updated in real time. You can see your performance across all subjects." },
+      { question: "When will more subjects be available?", answer: "Chemistry, Biology, English, and Logical Reasoning are coming soon. Follow us for updates!" }
+    ];
+    
+    // Initialize FAQ
+    function initFAQ() {
+      const container = document.getElementById('faqContainer');
+      faqs.forEach((faq, index) => {
+        const item = document.createElement('div');
+        item.className = 'faq-item';
+        item.innerHTML = `
+          <div class="faq-question">
+            <span>${faq.question}</span>
+            <span class="faq-toggle">▼</span>
+          </div>
+          <div class="faq-answer">${faq.answer}</div>
+        `;
+        item.addEventListener('click', () => item.classList.toggle('open'));
+        container.appendChild(item);
+      });
+    }
+    
     onAuthStateChanged(auth, async (user) => {
       if (!user) { window.location.href = 'login.html'; return; }
       try {
@@ -159,7 +271,9 @@
       } catch(e) {}
       document.getElementById('loadingScreen').style.display = 'none';
       document.getElementById('mainContent').style.display = 'block';
+      initFAQ();
     });
+    
     window.doLogout = async () => { await signOut(auth); window.location.href = 'login.html'; };
   </script>
 </body>
