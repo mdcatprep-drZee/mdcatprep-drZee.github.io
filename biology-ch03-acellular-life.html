@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Biology Chapter 3: Acellular Life — MDCAT Prep 2025</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a0f1e; --surface: #111827; --card: #151e2e;
+      --border: rgba(255,255,255,0.07); --accent: #00d4aa;
+      --accent2: #4f8ef7; --text: #e8edf5; --muted: #7a8599;
+      --correct: #00d4aa; --wrong: #f75c5c;
+    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+    header { position: sticky; top: 0; z-index: 100; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); backdrop-filter: blur(10px); background: rgba(10,15,30,0.7); }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit; }
+    .logo-icon { width: 32px; height: 32px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+    .logo-text { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 0.9rem; }
+    .logo-text span { color: var(--accent); }
+    .nav-btns { display: flex; gap: 12px; }
+    .nav-btn { background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 6px 14px; border-radius: 8px; font-size: 0.8rem; text-decoration: none; transition: 0.2s; }
+    .nav-btn:hover { border-color: var(--accent); }
+
+    .container { max-width: 800px; margin: 40px auto; padding: 0 20px; }
+    .test-header { text-align: center; margin-bottom: 40px; }
+    .test-tag { display: inline-block; background: rgba(0,212,170,0.1); color: var(--accent); font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; padding: 4px 12px; border-radius: 20px; margin-bottom: 12px; }
+    .test-header h1 { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; margin-bottom: 8px; }
+    .test-meta { color: var(--muted); font-size: 0.9rem; }
+
+    .stats-bar { position: sticky; top: 80px; z-index: 90; background: var(--surface); border: 1px solid var(--border); padding: 12px 20px; border-radius: 12px; display: flex; justify-content: space-around; margin-bottom: 30px; backdrop-filter: blur(10px); }
+    .stat-item { text-align: center; }
+    .stat-val { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.2rem; color: var(--accent); display: block; }
+    .stat-lab { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; }
+
+    .question-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; margin-bottom: 20px; transition: 0.3s; }
+    .q-num { font-family: 'Syne', sans-serif; font-weight: 800; color: var(--accent2); margin-bottom: 8px; font-size: 0.9rem; }
+    .q-text { font-size: 1.05rem; font-weight: 500; margin-bottom: 20px; }
+    .options { display: grid; gap: 10px; }
+    .option { background: var(--surface); border: 1px solid var(--border); padding: 14px 18px; border-radius: 10px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 12px; font-size: 0.95rem; }
+    .option:hover { border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.03); }
+    .option.correct { border-color: var(--correct); background: rgba(0,212,170,0.1); color: var(--correct); }
+    .option.wrong { border-color: var(--wrong); background: rgba(247,92,92,0.1); color: var(--wrong); }
+    .option.disabled { pointer-events: none; }
+    .opt-letter { font-family: 'Syne', sans-serif; font-weight: 700; width: 24px; height: 24px; background: rgba(255,255,255,0.05); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; }
+    .option.correct .opt-letter { background: var(--correct); color: #0a0f1e; }
+    .option.wrong .opt-letter { background: var(--wrong); color: #0a0f1e; }
+
+    .explanation { margin-top: 16px; padding: 14px; background: rgba(255,255,255,0.03); border-radius: 8px; border-left: 3px solid var(--accent2); display: none; font-size: 0.85rem; color: var(--muted); }
+
+    footer { text-align: center; padding: 40px; color: var(--muted); font-size: 0.8rem; border-top: 1px solid var(--border); }
+    footer strong { color: var(--accent); }
+
+    @media (max-width: 600px) {
+      .stats-bar { top: 70px; padding: 10px; }
+      .test-header h1 { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="index.html" class="logo">
+      <div class="logo-icon">🩺</div>
+      <div class="logo-text">MDCAT<span>Prep</span></div>
+    </a>
+    <div class="nav-btns">
+      <a href="index.html" class="nav-btn">Home</a>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="test-header">
+      <div class="test-tag">Biology Chapter 3</div>
+      <h1>Acellular Life</h1>
+      <p class="test-meta">NMDCAT Repeaters — 50 MCQs</p>
+    </div>
+
+    <div class="stats-bar">
+      <div class="stat-item"><span class="stat-val" id="score">0</span><span class="stat-lab">Score</span></div>
+      <div class="stat-item"><span class="stat-val" id="answered">0/50</span><span class="stat-lab">Progress</span></div>
+      <div class="stat-item"><span class="stat-val" id="accuracy">0%</span><span class="stat-lab">Accuracy</span></div>
+    </div>
+
+    <div id="quizContainer"></div>
+
+    <footer>Made with love by <strong>Dr. Zee</strong> &nbsp;·&nbsp; MDCAT Prep 2025</footer>
+  </div>
+
+  <script>
+    const questions = [
+      { q: "The viruses can reproduce in all, EXCEPT:", options: ["In animal cells", "In plant cells", "In bacterial cells", "In artificial media"], correct: 3 },
+      { q: "The size of parvovirus is:", options: ["20 nm", "250 nm", "200 nm", "300 nm"], correct: 0 },
+      { q: "The viruses can reproduce:", options: ["Without invading any cell", "In bacterial cell", "By budding", "By fusion"], correct: 1 },
+      { q: "Which one of the following is a non-cellular infectious entity?", options: ["Mycoplasma", "Escherichia coli", "Coronavirus", "Diplococcus"], correct: 2 },
+      { q: "It gives definitive shape to virion:", options: ["Capsid", "Genome", "Envelope", "Spike"], correct: 0 },
+      { q: "Which one of the following cannot be found in a bacterial cell?", options: ["Ribosomes", "Nucleus", "Cytoplasm", "Chromosome"], correct: 1 },
+      { q: "Who discovered that the agent that cause tobacco mosaic diseases was filterable?", options: ["Charles Chamberland", "Ivanowski", "W.M Stanley", "Edward Jenner"], correct: 1 },
+      { q: "The process in which single stranded RNA is converted into double stranded viral DNA called:", options: ["Translation", "Transcription", "Replication", "Reverse transcription"], correct: 3 },
+      { q: "Pick up the correct sequence of events of infection cycle of HIV:", options: ["Entry → Attachment → Uncoating → Reverse transcription", "Uncoating → Attachment → Entry → Reverse transcription", "Attachment → Entry → Uncoating → Reverse transcription", "Attachment → Uncoating → Entry → Reverse transcription"], correct: 2 },
+      { q: "The agent causing the AIDS was identified by research teams from:", options: ["Pasteur institute in USA", "National institute of health in France", "Pasteur Institute in USA and National Institute of health in France", "Pasteur Institute in France and National Institute of health in USA"], correct: 3 },
+      { q: "A viral disease which is characterized by severe pneumonia, rare vascular cancer, sudden weight loss and general loss of immune functions called:", options: ["Hepatitis", "Polio", "Small pox", "AIDS"], correct: 3 },
+      { q: "RNA-DNA hybrid structure is found in:", options: ["Cytoplasm", "Nucleus", "Core receptor site", "Mitochondria"], correct: 0 },
+      { q: "______ Is to animal virus as ______ is to bacterial virus:", options: ["Provirus, Phage", "Phage, Provirus", "Provirus, Prophage", "Prophage, Provirus"], correct: 2 },
+      { q: "HIV is classified as:", options: ["Bacteriophage", "Oncovirus", "Retrovirus", "Icosahedral virus"], correct: 2 },
+      { q: "Target cells of HIV in humans are:", options: ["Monocytes", "Helper T-lymphocytes", "Neurons", "Neutrophils"], correct: 1 },
+      { q: "The double stranded viral DNA can be incorporated into host T genome as:", options: ["Prophage", "Provirus", "Bacteriophage", "Phage virus"], correct: 1 },
+      { q: "The most recently discovered and least understood microorganisms are:", options: ["Prions", "Viruses", "Viroids", "Bacteria"], correct: 0 },
+      { q: "Viruses are extremely small infectious agents, which can only be seen under a/an:", options: ["Compound microscope", "Telescope", "Electron microscope", "Hand lens"], correct: 2 },
+      { q: "The capsid of HIV is surrounded by a/an:", options: ["Coat", "Capsule", "Envelope", "Slime"], correct: 2 },
+      { q: "A virion is:", options: ["Virus", "Viral protein", "Viral DNA", "Intact infectious virus particle"], correct: 3 },
+      { q: "Which of the following statement about viruses is incorrect?", options: ["They are obligate intracellular parasites", "They are resistant to bacterial and fungal antibiotics", "They lack metabolic machineries", "They are 10 to 1000 times larger than most bacteria"], correct: 3 },
+      { q: "The size of the largest virus is:", options: ["250 nm", "20 nm", "150 nm", "200 nm"], correct: 0 },
+      { q: "What gives definite shape to a virion?", options: ["Tail", "Base plate", "Capsid", "Genome"], correct: 2 },
+      { q: "In Charles Chamberland’s experiment which one of the following represented filterable viruses:", options: ["Bacteria", "Rabies virus", "TMV", "HIV"], correct: 1 },
+      { q: "The structures which are circular, double stranded DNA molecules contains the gene for drug resistance and heavy metals called:", options: ["Slime", "Mesosomes", "Chromatin Bodies", "Plasmids"], correct: 3 },
+      { q: "The structure used for sexual contact between bacteria is/are:", options: ["Plasmid", "Pilli", "Capsule", "Flagella"], correct: 1 },
+      { q: "How many molecules of reverse transcriptase are found in HIV?", options: ["2", "3", "4", "5"], correct: 0 },
+      { q: "Pick up the component which is comparatively in greater amount in Gram –ve cell wall:", options: ["Lipid", "Peptidoglycan", "Teichoic acid", "Lipoteichoic acid"], correct: 0 },
+      { q: "Overall thickness of Gram –ve cell wall is:", options: ["20 – 80 nm", "8 – 11 nm", "1 – 4 nm", "11 – 12 nm"], correct: 1 },
+      { q: "Structure which is invariably present in all bacteria:", options: ["Capsule", "Ribosome", "Slime", "Fimbriae"], correct: 1 },
+      { q: "In Escherichia coli closed circular, chromosome measures approximately:", options: ["140 µm", "1400 µm", "14000 µm", "140000 µm"], correct: 1 },
+      { q: "Pick up the largest bacterium:", options: ["Acanthurus nigrofuscus", "Epulopiscium fishelsoni", "Mycoplasma", "Escherichia coli"], correct: 1 },
+      { q: "Primary function of flagella is to help in:", options: ["Conjugation", "Motility", "Protection", "Cell division"], correct: 1 },
+      { q: "Flagella originates from:", options: ["Cell membrane", "Cell wall", "Capsule", "Basal body"], correct: 3 },
+      { q: "A bacterium with tuft of flagella at both poles is called:", options: ["Arthroche", "Monotrichous", "Peritrichous", "Amphitrichous"], correct: 3 },
+      { q: "Cell wall is absent in:", options: ["Bacillus", "Mycobacterium", "Cocci", "Mycoplasma"], correct: 3 },
+      { q: "Nuclear material of bacterial cell is a single circular and:", options: ["Single stranded DNA molecule", "Single stranded RNA molecule", "Double stranded DNA molecule", "Double stranded RNA molecule"], correct: 2 },
+      { q: "Bacillus subtilis exists in which one of the following shapes:", options: ["Round", "Oval", "Spiral", "Rod"], correct: 3 },
+      { q: "When cocci divides in three planes, it will produce:", options: ["Sarcina", "Tetrad", "Streptobacillus", "Staphylococcous"], correct: 0 },
+      { q: "Which of the following physical method is used to sterilize heat sensitive material like vaccines, enzymes and antibodies etc.?", options: ["Heat treatment", "Filtration", "Desiccation", "Radiation"], correct: 1 },
+      { q: "They destroy or inhibit the growth of microorganisms in living tissues:", options: ["Chemotherapeutic agents", "Antiseptics", "Disinfectants", "Radiations"], correct: 1 },
+      { q: "The flagella of bacteria are composed of:", options: ["Carbohydrate", "Lipid", "Tubulin", "Flagellin"], correct: 3 },
+      { q: "Nucleoid is visible in the light microscope after staining with:", options: ["Safranin", "Crystal violet", "Feulgen stain", "Acid Fuchsin"], correct: 2 },
+      { q: "A minute particle of RNA that lacks a protein coat and is capable of causing disease in both plants and animals:", options: ["Prion", "Virus", "Virion", "Viroid"], correct: 3 },
+      { q: "Call wall of archaebacteria does not contain:", options: ["Proteins", "Glycoproteins", "Polysaccharides", "Peptidoglycan"], correct: 3 },
+      { q: "In bacteria extra chromosomal genetic information is contained by:", options: ["Chromosome", "Chromatin body", "Nucleoid", "Plasmid"], correct: 3 },
+      { q: "Number of major layers in gram –ve cell wall is:", options: ["01", "02", "03", "04"], correct: 1 },
+      { q: "______ is the only genus of bacteria known to lack cell wall:", options: ["Staphylococcus", "Streptococcus", "Diplococcus", "Mycoplasma"], correct: 3 },
+      { q: "Mad cow infection is caused by:", options: ["Viruses", "Prions", "Virioids", "Phages"], correct: 1 },
+      { q: "A spiral bacterium is included in:", options: ["Cocci", "Bacilli", "Diplococci", "Spirochete"], correct: 3 }
+    ];
+
+    let score = 0;
+    let answeredCount = 0;
+    const container = document.getElementById('quizContainer');
+
+    function renderQuiz() {
+      questions.forEach((q, qIndex) => {
+        const card = document.createElement('div');
+        card.className = 'question-card';
+        card.innerHTML = `
+          <div class="q-num">Question ${qIndex + 1}</div>
+          <div class="q-text">${q.q}</div>
+          <div class="options">
+            ${q.options.map((opt, oIndex) => `
+              <div class="option" onclick="checkAnswer(${qIndex}, ${oIndex}, this)">
+                <div class="opt-letter">${String.fromCharCode(65 + oIndex)}</div>
+                <span>${opt}</span>
+              </div>
+            `).join('')}
+          </div>
+          <div class="explanation" id="exp-${qIndex}">
+            <strong>Correct Answer: ${String.fromCharCode(65 + q.correct)}</strong>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    window.checkAnswer = (qIndex, oIndex, element) => {
+      const card = element.closest('.question-card');
+      const options = card.querySelectorAll('.option');
+      const correctIndex = questions[qIndex].correct;
+
+      if (oIndex === correctIndex) {
+        element.classList.add('correct');
+        score++;
+      } else {
+        element.classList.add('wrong');
+        options[correctIndex].classList.add('correct');
+      }
+
+      options.forEach(opt => opt.classList.add('disabled'));
+      document.getElementById(`exp-${qIndex}`).style.display = 'block';
+      
+      answeredCount++;
+      updateStats();
+    };
+
+    function updateStats() {
+      document.getElementById('score').textContent = score;
+      document.getElementById('answered').textContent = `${answeredCount}/50`;
+      document.getElementById('accuracy').textContent = `${Math.round((score / answeredCount) * 100)}%`;
+    }
+
+    renderQuiz();
+  </script>
+</body>
+</html>
