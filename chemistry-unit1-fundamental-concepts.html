@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chemistry | Fundamental Concepts — NMDCAT 2021 | MDCAT Prep by Dr. Zee</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --bg:#0a0f1e; --surface:#111827; --card:#151e2e; --border:rgba(255,255,255,0.07); --accent:#00d4aa; --accent2:#4f8ef7; --text:#e8edf5; --muted:#7a8599; --correct:#5cf7b0; --wrong:#f75c5c; }
+    body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; overflow-x:hidden; }
+    body::before { content:''; position:fixed; inset:0; background-image:linear-gradient(rgba(255,255,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.025) 1px,transparent 1px); background-size:40px 40px; pointer-events:none; z-index:0; }
+    .orb { position:fixed; border-radius:50%; filter:blur(90px); opacity:0.18; pointer-events:none; z-index:0; }
+    .orb1 { width:350px; height:350px; background:var(--accent); top:-80px; right:-80px; }
+    .orb2 { width:280px; height:280px; background:var(--accent2); bottom:-60px; left:-60px; }
+    header { position:sticky; top:0; z-index:10; padding:14px 20px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--border); backdrop-filter:blur(12px); background:rgba(10,15,30,0.75); }
+    .back-btn { display:flex; align-items:center; gap:6px; text-decoration:none; color:var(--muted); font-size:0.82rem; font-weight:500; transition:color 0.2s; }
+    .back-btn:hover { color:var(--text); }
+    .header-badge { font-family:'Syne',sans-serif; font-weight:700; font-size:0.7rem; letter-spacing:0.08em; text-transform:uppercase; background:rgba(0,212,170,0.12); border:1px solid rgba(0,212,170,0.25); color:var(--accent); padding:4px 12px; border-radius:20px; }
+    .hero { position:relative; z-index:1; padding:36px 20px 24px; text-align:center; }
+    .chapter-tag { display:inline-flex; align-items:center; gap:6px; background:rgba(0,212,170,0.08); border:1px solid rgba(0,212,170,0.2); color:var(--accent); font-size:0.75rem; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; padding:5px 14px; border-radius:20px; margin-bottom:14px; }
+    .hero h1 { font-family:'Syne',sans-serif; font-size:clamp(1.3rem,4vw,2.2rem); font-weight:800; line-height:1.15; margin-bottom:8px; }
+    .hero h1 span { background:linear-gradient(90deg,var(--accent),var(--accent2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .hero p { color:var(--muted); font-size:0.83rem; margin-bottom:20px; }
+    .source-badge { display:inline-block; background:rgba(0,212,170,0.1); border:1px solid rgba(0,212,170,0.25); color:var(--accent); font-size:0.72rem; font-weight:700; padding:4px 14px; border-radius:20px; margin-bottom:20px; }
+    .scoreboard { display:flex; justify-content:center; gap:10px; flex-wrap:wrap; }
+    .score-box { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:10px 16px; text-align:center; min-width:70px; }
+    .score-num { font-family:'Syne',sans-serif; font-weight:800; font-size:1.3rem; }
+    .sn-s{color:var(--accent);} .sn-c{color:var(--correct);} .sn-w{color:var(--wrong);} .sn-r{color:var(--muted);}
+    .score-label { font-size:0.65rem; color:var(--muted); margin-top:2px; text-transform:uppercase; letter-spacing:0.05em; }
+    .timer-wrap { position:relative; z-index:1; max-width:700px; margin:14px auto 0; padding:0 16px; }
+    .timer-box { display:flex; align-items:center; justify-content:space-between; background:var(--card); border:1px solid var(--border); border-radius:12px; padding:11px 16px; }
+    .timer-display { font-family:'Syne',sans-serif; font-weight:800; font-size:1.3rem; color:var(--accent); transition:color 0.3s; }
+    .timer-display.warning{color:#f7a14f;} .timer-display.danger{color:var(--wrong);animation:pulse 1s infinite;}
+    .t-label { font-size:0.68rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; }
+    .timer-bar { height:4px; background:var(--surface); border-radius:10px; overflow:hidden; margin-top:7px; }
+    .timer-fill { height:100%; background:linear-gradient(90deg,var(--accent),var(--accent2)); border-radius:10px; transition:width 1s linear; width:100%; }
+    .timer-fill.warn{background:linear-gradient(90deg,#f7a14f,#f75c5c);}
+    .progress-wrap { position:relative; z-index:1; max-width:700px; margin:10px auto 0; padding:0 16px; }
+    .progress-bar { height:3px; background:var(--surface); border-radius:10px; overflow:hidden; }
+    .progress-fill { height:100%; background:linear-gradient(90deg,var(--accent),var(--accent2)); border-radius:10px; transition:width 0.4s ease; width:0%; }
+    .quiz-area { position:relative; z-index:1; max-width:700px; margin:20px auto 60px; padding:0 14px; }
+    .question-card { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:20px; margin-bottom:12px; animation:fadeUp 0.3s ease both; }
+    .q-number { font-size:0.68rem; color:var(--muted); font-weight:500; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:7px; }
+    .q-text { font-size:0.93rem; font-weight:500; line-height:1.6; color:var(--text); margin-bottom:14px; }
+    .options { display:flex; flex-direction:column; gap:6px; }
+    .option { display:flex; align-items:center; gap:10px; background:var(--surface); border:1px solid var(--border); border-radius:9px; padding:9px 12px; cursor:pointer; transition:border-color 0.18s,background 0.18s,transform 0.1s; font-size:0.85rem; color:var(--text); }
+    .option:hover:not(.disabled) { border-color:rgba(0,212,170,0.35); background:rgba(0,212,170,0.05); transform:translateX(2px); }
+    .option-letter { width:23px; height:23px; border-radius:6px; background:rgba(255,255,255,0.05); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-family:'Syne',sans-serif; font-weight:700; font-size:0.7rem; flex-shrink:0; }
+    .option.correct { border-color:var(--correct); background:rgba(92,247,176,0.08); }
+    .option.correct .option-letter { background:var(--correct); color:#0a0f1e; border-color:var(--correct); }
+    .option.wrong { border-color:var(--wrong); background:rgba(247,92,92,0.08); }
+    .option.wrong .option-letter { background:var(--wrong); color:#fff; border-color:var(--wrong); }
+    .option.disabled { cursor:default; }
+    #resultPanel { display:none; position:relative; z-index:1; max-width:700px; margin:40px auto 60px; padding:0 16px; text-align:center; }
+    .result-card { background:var(--card); border:1px solid var(--border); border-radius:20px; padding:32px 22px; }
+    .result-emoji { font-size:2.8rem; margin-bottom:10px; }
+    .result-title { font-family:'Syne',sans-serif; font-weight:800; font-size:1.4rem; margin-bottom:5px; }
+    .result-title span { background:linear-gradient(90deg,var(--accent),var(--accent2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .result-sub { color:var(--muted); font-size:0.83rem; margin-bottom:22px; }
+    .result-stats { display:flex; justify-content:center; gap:10px; flex-wrap:wrap; margin-bottom:22px; }
+    .result-stat { background:var(--surface); border:1px solid var(--border); border-radius:11px; padding:11px 16px; min-width:85px; }
+    .result-stat-num { font-family:'Syne',sans-serif; font-weight:800; font-size:1.4rem; }
+    .result-stat-label { font-size:0.65rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; margin-top:2px; }
+    .btn-row { display:flex; justify-content:center; gap:10px; flex-wrap:wrap; }
+    .restart-btn { background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#0a0f1e; font-family:'Syne',sans-serif; font-weight:700; font-size:0.88rem; padding:11px 24px; border-radius:11px; border:none; cursor:pointer; }
+    .home-btn { background:var(--surface); color:var(--text); font-family:'Syne',sans-serif; font-weight:700; font-size:0.88rem; padding:11px 24px; border-radius:11px; border:1px solid var(--border); cursor:pointer; text-decoration:none; display:inline-block; }
+    footer { position:relative; z-index:1; text-align:center; padding:22px; border-top:1px solid var(--border); color:var(--muted); font-size:0.75rem; }
+    footer strong { color:var(--accent); }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+  </style>
+</head>
+<body>
+  <div class="orb orb1"></div><div class="orb orb2"></div>
+  <header>
+    <a href="index.html" class="back-btn">← Home</a>
+    <div class="header-badge">🧪 Chemistry</div>
+  </header>
+  <section class="hero">
+    <div class="chapter-tag">🧪 Unit 1 — Fundamental Concepts</div>
+    <h1>Chemistry <span>Fundamental Concepts</span></h1>
+    <div class="source-badge">📋 NMDCAT 2021 — Unit 1 Topic Wise Test</div>
+    <p>50 MCQs — Mole, Stoichiometry, Empirical Formula & Yield | Time: 50 mins</p>
+    <div class="scoreboard">
+      <div class="score-box"><div class="score-num sn-s" id="scoreTotal">0</div><div class="score-label">Score</div></div>
+      <div class="score-box"><div class="score-num sn-c" id="scoreCorrect">0</div><div class="score-label">Correct</div></div>
+      <div class="score-box"><div class="score-num sn-w" id="scoreWrong">0</div><div class="score-label">Wrong</div></div>
+      <div class="score-box"><div class="score-num sn-r" id="scoreRemaining">50</div><div class="score-label">Remaining</div></div>
+    </div>
+  </section>
+  <div class="timer-wrap">
+    <div class="timer-box">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div>⏱️</div>
+        <div><div class="t-label">Time Remaining</div><div class="timer-display" id="timerDisplay">50:00</div></div>
+      </div>
+      <div style="text-align:right"><div class="t-label">Total Time</div><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.85rem;color:var(--muted)">50 mins</div></div>
+    </div>
+    <div class="timer-bar"><div class="timer-fill" id="timerFill"></div></div>
+  </div>
+  <div class="progress-wrap"><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div></div>
+  <div class="quiz-area" id="quizArea"></div>
+  <div id="resultPanel">
+    <div class="result-card">
+      <div class="result-emoji" id="resultEmoji">🎉</div>
+      <div class="result-title"><span id="resultTitle">Quiz Complete!</span></div>
+      <div class="result-sub" id="resultSub"></div>
+      <div class="result-stats">
+        <div class="result-stat"><div class="result-stat-num" id="rScore" style="color:var(--accent)">0</div><div class="result-stat-label">Score</div></div>
+        <div class="result-stat"><div class="result-stat-num" id="rCorrect" style="color:var(--correct)">0</div><div class="result-stat-label">Correct</div></div>
+        <div class="result-stat"><div class="result-stat-num" id="rWrong" style="color:var(--wrong)">0</div><div class="result-stat-label">Wrong</div></div>
+        <div class="result-stat"><div class="result-stat-num" id="rAccuracy" style="color:var(--accent2)">0%</div><div class="result-stat-label">Accuracy</div></div>
+      </div>
+      <div class="btn-row">
+        <button class="restart-btn" onclick="restartQuiz()">↻ Restart</button>
+        <a href="index.html" class="home-btn">🏠 Home</a>
+      </div>
+    </div>
+  </div>
+  <footer>Made with ❤️ by <strong>Dr. Zee</strong> &nbsp;·&nbsp; MDCAT Prep 2025 &nbsp;·&nbsp; Chemistry Unit 1</footer>
+  <script>
+    const questions = [
+      {q:"The number of oxygen atoms in 4.4g of CO₂ is",options:["NA","NA/10","2NA","NA/5"],answer:2},
+      {q:"Number of electrons in 3.5g of nitride ion (N⁻³) is",options:["3.2NA","2NA","2.5NA","1.25NA"],answer:2},
+      {q:"The number of molecules in 8.96 dm³ of a gas at 0°C and 1 atm pressure is?",options:["6.02×10²³","2.408×10²⁴","1.204×10²⁴","2.408×10²³"],answer:3},
+      {q:"Avogadro's number of atoms are present in",options:["3.2g CH₄","10g NH₃","2g He","32g O₂"],answer:0},
+      {q:"The number of molecules in 11g of CO₂ is",options:["6.02×10²³","3.01×10²³","1.505×10²³","6.02×10²⁴"],answer:1},
+      {q:"1 amu is equal to",options:["1.661×10⁻²⁴kg","1.661×10⁻²¹g","6.02×10⁻²³g","1.661×10⁻²¹mg"],answer:3},
+      {q:"In combustion analysis, H₂O vapours are absorbed by",options:["50% KOH","Mg(ClO₄)₂","NaOH","MgCl₂"],answer:1},
+      {q:"11g a gas occupies 5.6dm³ at STP. The gas is",options:["Ne","He","CH₄","N₂O"],answer:3},
+      {q:"Which type of relationship can be studied with the help of balanced chemical equation",options:["Mass-volume","Mole-volume","Mole-mole","All relations can be studied"],answer:3},
+      {q:"The mass of an atom compared with mass of one atom of C⁻¹² is called",options:["One mole","Gram atomic mass","Atomic number","Relative atomic mass"],answer:3},
+      {q:"35.5amu is ______ of chlorine",options:["Nucleon number","Relative molecular mass","Relative ionic mass","Relative atomic mass"],answer:3},
+      {q:"All reactant are converted to product and no side reaction takes place are basic assumption while doing",options:["Limiting reactant","Theoretical yield","Stoichiometry","All of above"],answer:3},
+      {q:"18g of water is produced if 2g of H₂ react with ______ of oxygen",options:["8g","16g","24g","32g"],answer:1},
+      {q:"%age of oxygen in combustion analysis is calculated by the formula",options:["(%age of C +%age of H)–100","(%age of C +%age of H) + 100","(%age of C +%age of H) 100","100 – (%age of C +%age of H)"],answer:3},
+      {q:"6.3g of HNO₃ has mass of nitrate ions",options:["6.2g","62g","0.62g","3.1g"],answer:0},
+      {q:"9g of ice has number of covalent bonds",options:["6.02×10²³","3.01×10²³","1.661×10⁻²³","1.505×10²³"],answer:0},
+      {q:"A well-known ideal gas is enclosed in a container having volume 5603cm³ at STP. Its mass comes out to be 16g. The unknown gas is",options:["O₂","CH₄","SO₂","CO₂"],answer:2},
+      {q:"The efficiency of chemical reaction can be checked by calculating",options:["Amount of limiting reactant","Amount of product formed","Amount of reactant left un-used","Amount of reactant in excess"],answer:1},
+      {q:"Actual yield is less than theoretical yield because of",options:["n-experience worker","Some competing side reaction","Lack of proper technique","All of the above"],answer:3},
+      {q:"If 24g of organic compound is burnt in combustion tube which gives 22g of CO₂. %age of carbon is",options:["50%","20%","65%","25%"],answer:3},
+      {q:"Which of the following term is correct for H = 1.008amu",options:["Relative atomic mass","Average atomic mass","Fractional atomic mass","All of these"],answer:3},
+      {q:"10g of CaO is produced if 25g of CaCO₃ is roasted. Find %age yield",options:["40%","71%","75%","33%"],answer:1},
+      {q:"Under standard conditions, stoichiometry can be applied to",options:["2H₂ + O₂ → 2H₂O","N₂ + 3H₂ ⇌ 2NH₃","PCl₅ ⇌ PCl₃ + Cl₂","2SO₃ ⇌ 2SO₂ + O₂"],answer:0},
+      {q:"14g of Fe react with how much mass of O2 to produce Fe₂O₃",options:["16g","32g","12g","6g"],answer:3},
+      {q:"5g of C and 10g of Mg contain equal number of",options:["Electrons","Atoms","Neutrons","Molecules"],answer:1},
+      {q:"Volume occupied by 51g of NH₃ at STP is",options:["60 dm³","79dm³","89dm³","67dm³"],answer:3},
+      {q:"How many moles of KClO₃ are required to prepare 6 moles of oxygen (2KClO3 → 2KCl + 3O2)",options:["3.17mol","4.0mol","5.0mol","2mol"],answer:1},
+      {q:"The number of moles of SO₂ which contain 16g of oxygen",options:["0.25mol","0.5mol","0.75mol","1 mol"],answer:1},
+      {q:"What volume of 0.5g of H₂, 16g of O₂ and 7.0g of N₂ is present in mixture at STP",options:["2.24dm³","22.4dm³","0.224dm³","11.2dm³"],answer:1},
+      {q:"A balanced chemical equation does not tell about",options:["Molar ratios","Direction of Reaction","Feasibility of reaction","All of these"],answer:2},
+      {q:"CH₂O is empirical formula for",options:["Maltose, Acetic acid","Sucrose, lactic acid","Methanol, Ethanal","Methanal, lactic acid"],answer:3},
+      {q:"Choose the correct relation for percentage yield",options:["(Actual yield/Theoretical yield) × 100","(Actual yield/Theoretical yield) × 10³","(Theoretical yield/Actual yield) × 100","(Theoretical yield/Actual yield) × 10³"],answer:0},
+      {q:"A balanced chemical equation always contains equal number of ______ of reactant and product",options:["Atoms","Molecules","Mole","Volume"],answer:0},
+      {q:"While determining molecular formula, the simple multiple n is unity for",options:["C₆H₆O₂","C₂H₄O₂","C₆H₁₂O₆","C₃H₄O₃"],answer:3},
+      {q:"Mass of one g ion of CO₃⁻² is",options:["30g","60g","15g","75g"],answer:1},
+      {q:"A mole of any substance is related to",options:["Number of particles","Volume of gaseous substance","Mass of a substance","All of these"],answer:3},
+      {q:"Avogadro's number is the number of molecules present in",options:["Gram molecular mass","1 dm³ of CH₄","1g of atom","1g of formula mass"],answer:0},
+      {q:"Sole product in combustion analysis are",options:["CO and H₂O","C + CO + H₂O","C + CO₂ + H₂O","CO₂ + H₂O"],answer:3},
+      {q:"3×10⁻²¹ moles of an amino acid having molecular mass 200g mol⁻¹ would have molecules",options:["200","1800","100","3600"],answer:1},
+      {q:"A polymer of simplest formula CH₂ has molar mass of 28000 gmol⁻¹ its molecular formula will be",options:["100 times that of its E.F","500 times of its E.F","200 times of its E.F","2000 times of its E.F"],answer:3},
+      {q:"H₂ burns in Cl₂ to produce HCl. The ratio of masses of reactants in chemical reaction H₂ + Cl₂ → 2HCl is",options:["2: 35.5","1 : 35.5","1 : 71","2 : 70"],answer:1},
+      {q:"Which of the following has same number of molecules as present in 11g of CO₂?",options:["4g of O₂","4.5g of H₂O","4g of O","moles of NaCl"],answer:1},
+      {q:"1 mole of CH₃OH and 1 mol of C₂H₅OH have equal number of",options:["C-atoms","O-atoms","H-atoms","Electrons"],answer:1},
+      {q:"Which one will produce largest number of negatively charged ions in case of 100% ionization of 1 mole of",options:["Na₂SO₄","NaCl","CaCl₂","AlCl₃"],answer:3},
+      {q:"A compound has 50% of A (molecular mass = 20g/mol) and 50% of B (molecular mass = 10g/mol). Empirical formula is",options:["A₂B","A₂B₂","AB₂","A₂B₃"],answer:2},
+      {q:"1 mole of each of N₂O and CO₂ has same number of",options:["Molecules","Atoms","Electrons","All of these"],answer:3},
+      {q:"Atomic mass unit is",options:["1/10 of mass of one C-atom","1/14 of mass of one C-atom","1/12 of mass of one C-atom","1/6 of mass of one C-atom"],answer:2},
+      {q:"The number of atoms present in 0.1 mole of oxygen gas are",options:["6.02×10²²","2×6.02×10²²","3.01×10²³","9.03×10²²"],answer:1},
+      {q:"The maximum amount of the product that can be produced by a given amount of a reactant, according to balanced chemical equation is called",options:["Actual yield","Theoretical yield","%age yield","Yield"],answer:1},
+      {q:"Which of the following compounds does not show same molecular and empirical formula?",options:["(CHO)₂","HCHO","C₂H₅OH","HCOOH"],answer:0},
+    ];
+
+    // Answer key: D,C,B,A,C,D,B,D,D,D,D,D,B,D,A,A,C,B,D,D,D,B,A,D,B,D,B,B,B,C,D,A,A,D,B,D,A,D,B,D,B,B,B,D,C,D,C,B,B,A
+    const ansKey=[3,2,1,0,2,3,1,3,3,3,3,3,1,3,0,0,2,1,3,3,3,1,0,3,1,3,1,1,1,2,3,0,0,3,1,3,0,3,1,3,1,1,1,3,2,3,2,1,1,0];
+    ansKey.forEach((a,i)=>{ if(questions[i]) questions[i].answer=a; });
+
+    let correct=0,wrong=0,answered=0;
+    const total=questions.length;
+    const TOTAL_SECONDS=50*60;
+    let timeLeft=TOTAL_SECONDS,timerInterval=null;
+
+    function startTimer(){
+      timerInterval=setInterval(()=>{
+        timeLeft--;updateTimerDisplay();
+        if(timeLeft<=0){clearInterval(timerInterval);autoSubmit();}
+      },1000);
+    }
+    function updateTimerDisplay(){
+      const m=Math.floor(timeLeft/60),s=timeLeft%60;
+      const d=document.getElementById('timerDisplay'),f=document.getElementById('timerFill');
+      d.textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+      f.style.width=((timeLeft/TOTAL_SECONDS)*100)+'%';
+      d.className='timer-display'; f.className='timer-fill';
+      if(timeLeft<=300){d.classList.add('danger');f.classList.add('warn');}
+      else if(timeLeft<=600){d.classList.add('warning');f.classList.add('warn');}
+    }
+    function autoSubmit(){
+      questions.forEach((q,i)=>{
+        const opts=document.getElementById('opts-'+i);
+        if(!opts.dataset.answered){opts.dataset.answered='1';opts.querySelectorAll('.option').forEach(o=>o.classList.add('disabled'));opts.querySelectorAll('.option')[q.answer].classList.add('correct');}
+      });setTimeout(showResult,600);
+    }
+    function buildQuiz(){
+      const area=document.getElementById('quizArea');area.innerHTML='';
+      questions.forEach((q,i)=>{
+        const letters=['A','B','C','D'];
+        const card=document.createElement('div');card.className='question-card';card.style.animationDelay=(i*0.015)+'s';
+        card.innerHTML=`<div class="q-number">Question ${i+1} of ${total}</div><div class="q-text">${i+1}. ${q.q}</div><div class="options" id="opts-${i}">${q.options.map((o,j)=>`<div class="option" onclick="selectAnswer(${i},${j})"><div class="option-letter">${letters[j]}</div><span>${o}</span></div>`).join('')}</div>`;
+        area.appendChild(card);
+      });
+    }
+    function selectAnswer(qi,oi){
+      const q=questions[qi],opts=document.getElementById('opts-'+qi);
+      if(opts.dataset.answered)return;opts.dataset.answered='1';answered++;
+      const all=opts.querySelectorAll('.option');all.forEach(o=>o.classList.add('disabled'));
+      if(oi===q.answer){all[oi].classList.add('correct');correct++;}
+      else{all[oi].classList.add('wrong');all[q.answer].classList.add('correct');wrong++;}
+      updateScore();if(answered===total)setTimeout(showResult,800);
+    }
+    function updateScore(){
+      document.getElementById('scoreTotal').textContent=correct;
+      document.getElementById('scoreCorrect').textContent=correct;
+      document.getElementById('scoreWrong').textContent=wrong;
+      document.getElementById('scoreRemaining').textContent=total-answered;
+      document.getElementById('progressFill').style.width=((answered/total)*100)+'%';
+    }
+    function showResult(){
+      clearInterval(timerInterval);
+      document.getElementById('quizArea').style.display='none';
+      document.getElementById('resultPanel').style.display='block';
+      const acc=Math.round((correct/total)*100);
+      document.getElementById('rScore').textContent=correct+'/'+total;
+      document.getElementById('rCorrect').textContent=correct;
+      document.getElementById('rWrong').textContent=wrong;
+      document.getElementById('rAccuracy').textContent=acc+'%';
+      const e=acc>=80?'🏆':acc>=60?'👍':acc>=40?'📚':'💪';
+      const t=acc>=80?'Excellent!':acc>=60?'Good Job!':acc>=40?'Keep Studying!':'Keep Practicing!';
+      document.getElementById('resultEmoji').textContent=e;
+      document.getElementById('resultTitle').textContent=t;
+      document.getElementById('resultSub').textContent=`You scored ${correct} out of ${total} — Accuracy: ${acc}%`;
+    }
+    function restartQuiz(){
+      clearInterval(timerInterval);correct=0;wrong=0;answered=0;timeLeft=TOTAL_SECONDS;
+      updateTimerDisplay();document.getElementById('resultPanel').style.display='none';
+      document.getElementById('quizArea').style.display='block';updateScore();buildQuiz();startTimer();
+      window.scrollTo({top:0,behavior:'smooth'});
+    }
+    buildQuiz();startTimer();
+  </script>
+</body>
+</html>

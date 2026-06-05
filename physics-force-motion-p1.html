@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Physics | Force & Motion — MDCAT Prep by Dr. Zee</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --bg:#0a0f1e; --surface:#111827; --card:#151e2e; --border:rgba(255,255,255,0.07); --accent:#4f8ef7; --accent2:#00d4aa; --text:#e8edf5; --muted:#7a8599; --correct:#5cf7b0; --wrong:#f75c5c; }
+    body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; overflow-x:hidden; }
+    body::before { content:''; position:fixed; inset:0; background-image:linear-gradient(rgba(255,255,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.025) 1px,transparent 1px); background-size:40px 40px; pointer-events:none; z-index:0; }
+    .orb { position:fixed; border-radius:50%; filter:blur(90px); opacity:0.18; pointer-events:none; z-index:0; }
+    .orb1 { width:350px; height:350px; background:var(--accent); top:-80px; right:-80px; }
+    .orb2 { width:280px; height:280px; background:var(--accent2); bottom:-60px; left:-60px; }
+    header { position:sticky; top:0; z-index:10; padding:14px 20px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--border); backdrop-filter:blur(12px); background:rgba(10,15,30,0.75); }
+    .back-btn { display:flex; align-items:center; gap:6px; text-decoration:none; color:var(--muted); font-size:0.82rem; font-weight:500; transition:color 0.2s; }
+    .back-btn:hover { color:var(--text); }
+    .header-badge { font-family:'Syne',sans-serif; font-weight:700; font-size:0.7rem; letter-spacing:0.08em; text-transform:uppercase; background:rgba(79,142,247,0.12); border:1px solid rgba(79,142,247,0.25); color:var(--accent); padding:4px 12px; border-radius:20px; }
+    .hero { position:relative; z-index:1; padding:36px 20px 24px; text-align:center; }
+    .chapter-tag { display:inline-flex; align-items:center; gap:6px; background:rgba(79,142,247,0.08); border:1px solid rgba(79,142,247,0.2); color:var(--accent); font-size:0.75rem; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; padding:5px 14px; border-radius:20px; margin-bottom:14px; }
+    .hero h1 { font-family:'Syne',sans-serif; font-size:clamp(1.3rem,4vw,2.2rem); font-weight:800; line-height:1.15; margin-bottom:8px; }
+    .hero h1 span { background:linear-gradient(90deg,var(--accent),var(--accent2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .hero p { color:var(--muted); font-size:0.83rem; margin-bottom:20px; }
+    .source-badge { display:inline-block; background:rgba(79,142,247,0.1); border:1px solid rgba(79,142,247,0.25); color:var(--accent); font-size:0.72rem; font-weight:700; padding:4px 14px; border-radius:20px; margin-bottom:20px; }
+    .scoreboard { display:flex; justify-content:center; gap:10px; flex-wrap:wrap; }
+    .score-box { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:10px 16px; text-align:center; min-width:70px; }
+    .score-num { font-family:'Syne',sans-serif; font-weight:800; font-size:1.3rem; }
+    .sn-s{color:var(--accent);} .sn-c{color:var(--correct);} .sn-w{color:var(--wrong);} .sn-r{color:var(--muted);}
+    .score-label { font-size:0.65rem; color:var(--muted); margin-top:2px; text-transform:uppercase; letter-spacing:0.05em; }
+    .timer-wrap { position:relative; z-index:1; max-width:700px; margin:14px auto 0; padding:0 16px; }
+    .timer-box { display:flex; align-items:center; justify-content:space-between; background:var(--card); border:1px solid var(--border); border-radius:12px; padding:11px 16px; }
+    .timer-display { font-family:'Syne',sans-serif; font-weight:800; font-size:1.3rem; color:var(--accent); transition:color 0.3s; }
+    .timer-display.warning{color:#f7a14f;} .timer-display.danger{color:var(--wrong);animation:pulse 1s infinite;}
+    .t-label { font-size:0.68rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; }
+    .timer-bar { height:4px; background:var(--surface); border-radius:10px; overflow:hidden; margin-top:7px; }
+    .timer-fill { height:100%; background:linear-gradient(90deg,var(--accent),var(--accent2)); border-radius:10px; transition:width 1s linear; width:100%; }
+    .timer-fill.warn{background:linear-gradient(90deg,#f7a14f,#f75c5c);}
+    .progress-wrap { position:relative; z-index:1; max-width:700px; margin:10px auto 0; padding:0 16px; }
+    .progress-bar { height:3px; background:var(--surface); border-radius:10px; overflow:hidden; }
+    .progress-fill { height:100%; background:linear-gradient(90deg,var(--accent),var(--accent2)); border-radius:10px; transition:width 0.4s ease; width:0%; }
+    .quiz-area { position:relative; z-index:1; max-width:700px; margin:20px auto 60px; padding:0 14px; }
+    .question-card { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:20px; margin-bottom:12px; animation:fadeUp 0.3s ease both; }
+    .q-number { font-size:0.68rem; color:var(--muted); font-weight:500; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:7px; }
+    .q-text { font-size:0.93rem; font-weight:500; line-height:1.6; color:var(--text); margin-bottom:14px; }
+    .options { display:flex; flex-direction:column; gap:6px; }
+    .option { display:flex; align-items:center; gap:10px; background:var(--surface); border:1px solid var(--border); border-radius:9px; padding:9px 12px; cursor:pointer; transition:border-color 0.18s,background 0.18s,transform 0.1s; font-size:0.85rem; color:var(--text); }
+    .option:hover:not(.disabled) { border-color:rgba(79,142,247,0.35); background:rgba(79,142,247,0.05); transform:translateX(2px); }
+    .option-letter { width:23px; height:23px; border-radius:6px; background:rgba(255,255,255,0.05); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-family:'Syne',sans-serif; font-weight:700; font-size:0.7rem; flex-shrink:0; }
+    .option.correct { border-color:var(--correct); background:rgba(92,247,176,0.08); }
+    .option.correct .option-letter { background:var(--correct); color:#0a0f1e; border-color:var(--correct); }
+    .option.wrong { border-color:var(--wrong); background:rgba(247,92,92,0.08); }
+    .option.wrong .option-letter { background:var(--wrong); color:#fff; border-color:var(--wrong); }
+    .option.disabled { cursor:default; }
+    #resultPanel { display:none; position:relative; z-index:1; max-width:700px; margin:40px auto 60px; padding:0 16px; text-align:center; }
+    .result-card { background:var(--card); border:1px solid var(--border); border-radius:20px; padding:32px 22px; }
+    .result-emoji { font-size:2.8rem; margin-bottom:10px; }
+    .result-title { font-family:'Syne',sans-serif; font-weight:800; font-size:1.4rem; margin-bottom:5px; }
+    .result-title span { background:linear-gradient(90deg,var(--accent),var(--accent2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .result-sub { color:var(--muted); font-size:0.83rem; margin-bottom:22px; }
+    .result-stats { display:flex; justify-content:center; gap:10px; flex-wrap:wrap; margin-bottom:22px; }
+    .result-stat { background:var(--surface); border:1px solid var(--border); border-radius:11px; padding:11px 16px; min-width:85px; }
+    .result-stat-num { font-family:'Syne',sans-serif; font-weight:800; font-size:1.4rem; }
+    .result-stat-label { font-size:0.65rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; margin-top:2px; }
+    .btn-row { display:flex; justify-content:center; gap:10px; flex-wrap:wrap; }
+    .restart-btn { background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#0a0f1e; font-family:'Syne',sans-serif; font-weight:700; font-size:0.88rem; padding:11px 24px; border-radius:11px; border:none; cursor:pointer; }
+    .home-btn { background:var(--surface); color:var(--text); font-family:'Syne',sans-serif; font-weight:700; font-size:0.88rem; padding:11px 24px; border-radius:11px; border:1px solid var(--border); cursor:pointer; text-decoration:none; display:inline-block; }
+    footer { position:relative; z-index:1; text-align:center; padding:22px; border-top:1px solid var(--border); color:var(--muted); font-size:0.75rem; }
+    footer strong { color:var(--accent); }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+  </style>
+</head>
+<body>
+  <div class="orb orb1"></div><div class="orb orb2"></div>
+  <header>
+    <a href="index.html" class="back-btn">← Home</a>
+    <div class="header-badge">⚛️ Physics</div>
+  </header>
+  <section class="hero">
+    <div class="chapter-tag">⚛️ Force & Motion</div>
+    <h1>Physics <span>Force & Motion</span></h1>
+    <div class="source-badge">📋 MDCAT 2021 — Force & Motion</div>
+    <p>50 MCQs — Force, Motion, Projectile & Momentum | Time: 50 mins</p>
+    <div class="scoreboard">
+      <div class="score-box"><div class="score-num sn-s" id="scoreTotal">0</div><div class="score-label">Score</div></div>
+      <div class="score-box"><div class="score-num sn-c" id="scoreCorrect">0</div><div class="score-label">Correct</div></div>
+      <div class="score-box"><div class="score-num sn-w" id="scoreWrong">0</div><div class="score-label">Wrong</div></div>
+      <div class="score-box"><div class="score-num sn-r" id="scoreRemaining">50</div><div class="score-label">Remaining</div></div>
+    </div>
+  </section>
+  <div class="timer-wrap">
+    <div class="timer-box">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div>⏱️</div>
+        <div><div class="t-label">Time Remaining</div><div class="timer-display" id="timerDisplay">50:00</div></div>
+      </div>
+      <div style="text-align:right"><div class="t-label">Total Time</div><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.85rem;color:var(--muted)">50 mins</div></div>
+    </div>
+    <div class="timer-bar"><div class="timer-fill" id="timerFill"></div></div>
+  </div>
+  <div class="progress-wrap"><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div></div>
+  <div class="quiz-area" id="quizArea"></div>
+  <div id="resultPanel">
+    <div class="result-card">
+      <div class="result-emoji" id="resultEmoji">🎉</div>
+      <div class="result-title"><span id="resultTitle">Quiz Complete!</span></div>
+      <div class="result-sub" id="resultSub"></div>
+      <div class="result-stats">
+        <div class="result-stat"><div class="result-stat-num" id="rScore" style="color:var(--accent)">0</div><div class="result-stat-label">Score</div></div>
+        <div class="result-stat"><div class="result-stat-num" id="rCorrect" style="color:var(--correct)">0</div><div class="result-stat-label">Correct</div></div>
+        <div class="result-stat"><div class="result-stat-num" id="rWrong" style="color:var(--wrong)">0</div><div class="result-stat-label">Wrong</div></div>
+        <div class="result-stat"><div class="result-stat-num" id="rAccuracy" style="color:var(--accent2)">0%</div><div class="result-stat-label">Accuracy</div></div>
+      </div>
+      <div class="btn-row">
+        <button class="restart-btn" onclick="restartQuiz()">↻ Restart</button>
+        <a href="index.html" class="home-btn">🏠 Home</a>
+      </div>
+    </div>
+  </div>
+  <footer>Made with ❤️ by <strong>Dr. Zee</strong> &nbsp;·&nbsp; MDCAT Prep 2025 &nbsp;·&nbsp; MDCAT Physics</footer>
+  <script>
+    const questions = [
+      {q:"When a body is in motion, ________ always changes.",options:["Its velocity","Its position vector","Its acceleration","Its momentum"],answer:1},
+      {q:"A ball of mass m travelling with velocity 5v collides with and sticks to a ball of mass 5m travelling in the same direction with velocity v. Their common velocity after the collision is:",options:["v","6v/5","8v/10","5v/3"],answer:3},
+      {q:"The total distance covered by the object from O to C? (Graph: velocity-time, O to C)",options:["240 m","390 m","250 m","120 m"],answer:0},
+      {q:"The acceleration of the object during the travelling from A to B? (velocity-time graph)",options:["30 m/s²","-10 m/s²","10 m/s²","0 m/s²"],answer:3},
+      {q:"The average speed of the object in ms⁻¹ during 8 seconds is",options:["Zero","30","20","none of these"],answer:1},
+      {q:"Ball A has mass m and is moving with velocity v. It makes a head-on elastic collision with a stationary ball B of mass 2m. After the collision their speeds (vA and vB) are:",options:["0, v/2","-v, v","-v/3, 2v/3","-2v/3, v/3"],answer:2},
+      {q:"A body is moving with an initial velocity of 2 kms⁻¹. After a time of 50 s its velocity becomes 1.5 kms⁻¹. Its acceleration will be:",options:["30 ms⁻²","40 ms⁻²","-20 ms⁻²","-10 ms⁻²"],answer:3},
+      {q:"If a force of 12N is applied on a body and its momentum is changed from 60 kgms⁻¹ to 36 kg ms⁻¹, then find the time during which this force acts:",options:["1 second","2 seconds","12 seconds","24 seconds"],answer:1},
+      {q:"If a body has 200 kg mass and its velocity gets reduced from 25 m s⁻¹ to 20 m s⁻¹ in 4 seconds, average retarding force on a body will be",options:["-200N","-250 N","200 N","250 N"],answer:1},
+      {q:"Which of the following graphs represents the velocity as a function of time of an object thrown straight up?",options:["Graph A (positive slope)","Graph B (horizontal)","Graph C (V-shape peak)","Graph D (inverted V)"],answer:2},
+      {q:"Range of projectile will be minimum if angle of the projectile is",options:["0°","60°","30°","75°"],answer:0},
+      {q:"For projectile motion in the absence of air resistance its _______:",options:["Vertical speed is constant","K.E at maximum height is zero","Horizontal acceleration is zero","Vertical acceleration is zero"],answer:0},
+      {q:"The displacement versus time graph for a body moving in a straight line. Which of the following regions represents the motion when no force is acting on the body?",options:["ab","bc","cd","de"],answer:2},
+      {q:"The range of the projectile depends upon the velocity of the projection and angle of the projection, i.e., 45°. For a fixed velocity, when the angle of projection is larger than 45°, which of the following is correct?",options:["Both the height and the range attained by the projectile will be less","Both the height and the range attained by the projectile will be more","The height attained by the projectile will be less but the range is more","The height attained by the projectile will be more but the range is less"],answer:3},
+      {q:"Which of the given variable is present in all three equations of motion?",options:["Acceleration","Distance","Time","all of these"],answer:0},
+      {q:"A player catches a ball of 150g moving 20ms⁻¹, it takes 0.1s to stop. The force exerted by ball is:",options:["30N","300N","30,000N","0.3N"],answer:0},
+      {q:"A projectile is launched at 45° to the horizontal with an initial kinetic energy E. Assuming air resistance to be negligible what will be the kinetic energy of the projectile when it reaches its highest point?",options:["0.50 E","0.70E","0.71 E","E"],answer:0},
+      {q:"If the displacement of a particle is zero, then the distance covered",options:["Must be zero","Cannot be zero","Is negative","May or may not be zero"],answer:3},
+      {q:"A car covers the first half of certain distance with speed V₁ and second half with speed V₂, the average speed is:",options:["(V₁+V₂)/(V₁V₂)","2V₁/(V₁+V₂)","2V₂/(V₁+V₂)","2V₁V₂/(V₁+V₂)"],answer:3},
+      {q:"Height of projectile is maximum at an angle of:",options:["45°","30°","60°","90°"],answer:3},
+      {q:"The horizontal range R and maximum range Rmax projectile are related as",options:["R = Rmax sin²θ","R = Rmax sin 2θ","R = Rmax sin θ","2R = Rmax sin²θ"],answer:1},
+      {q:"A ball is thrown from a point with a speed v₀ at an angle of projection θ. From the same point and at the same instant person starts running with a constant speed v₀/2 to catch the ball. Will the person be able to catch the ball? If yes, what should be the angle of projection?",options:["Yes, 60°","No","Yes, 30°","Yes, 45°"],answer:0},
+      {q:"A boy throws a ball with velocity 10 m/s in vertically upward direction. If g = 10 m/s², the ball rises to a height",options:["2m","10 cm","5m","25 m"],answer:2},
+      {q:"An object moves around a circular path of radius R. The object starts from point A, goes to point B and describes an arc of half of the circle. Which of the following is true about the magnitude of displacement and travelled distance?",options:["Displacement=R, Distance=2πR","Displacement=2R, Distance=πR","Displacement=R/2, Distance=R","Displacement=R, Distance=4πR"],answer:1},
+      {q:"For range to have maximum value, the function sin2θ should have value",options:["90","45","1","0"],answer:2},
+      {q:"A particle moves along a semicircle of radius 10m in 5 seconds. The average velocity of the particle is",options:["2π ms⁻¹","6 ms⁻¹","4π ms⁻¹","4 ms⁻¹"],answer:3},
+      {q:"A stone falls from a balloon that is descending at a uniform rate of 12 m/s. The displacement of the stone from the point of release after 10 sec is",options:["490 m","610 m","510 m","725 m"],answer:1},
+      {q:"An object is thrown along a direction inclined at an angle of 45° with the horizontal direction. The horizontal range of the particle is equal to",options:["Vertical height","Twice the vertical height","Thrice the vertical height","Four times the vertical height"],answer:3},
+      {q:"Two perfectly elastic particles P and Q of equal mass travelling along the line joining them with velocities 15 m/sec and 10 m/sec. After collision, their velocities respectively (in m/sec.) will be",options:["0, 25","10, 15","5, 20","20, 5"],answer:1},
+      {q:"If instantaneous acceleration equal to average acceleration, then body is moving with:",options:["Variable acceleration","uniform acceleration","uniform velocity","increasing acceleration"],answer:1},
+      {q:"The rate of change of momentum for a freely falling object is always:",options:["= mg","> mg","< mg","zero"],answer:0},
+      {q:"When two objects of masses m₁ and m₂ makes a collision such that linear momentum of them is said to be conserved then?",options:["m₁v₁ + m₂v₂ = m₁v₁' + m₂v₂'","m ∝ 1/V","No external force acts on bodies","All of these"],answer:3},
+      {q:"The v-t graph of a moving object is given. The maximum acceleration is",options:["1 cms⁻²","2 cms⁻²","3 cms⁻²","6 cms⁻²"],answer:3},
+      {q:"If an object moves with a constant velocity, we can conclude that",options:["It is moving toward its natural place.","There are no forces acting on it.","There is no unbalanced (net) force acting on it.","It has a very large inertia"],answer:2},
+      {q:"A ball with a weight of 20 N is thrown vertically upward. What is the acceleration of the ball just as it reaches the top of its path?",options:["zero","9.8 m/s² downward","9.8 m/s² upward","The acceleration cannot be determined"],answer:1},
+      {q:"When a block of wood of mass 2 kg is pushed along a horizontal flat surface of a bench, the force of friction is 4N. When the block is pushed along the bench with a force of 10N, it moves with a constant",options:["Speed of 3 ms⁻¹","Acceleration of 3 ms⁻²","Speed of 5 ms⁻¹","Acceleration of 5 ms⁻²"],answer:1},
+      {q:"A shell of mass 10 kg moving downwards with a velocity of 200 m/s explodes in mid air and two fragments of masses 5 kg each are produced. If velocity of one fragment is 100 m/s then velocity of other fragment is",options:["100 m/s","200 m/s","300 m/s","400 m/s"],answer:2},
+      {q:"If K.E of a body is equal to the magnitude of its momentum, then the velocity of the body will be",options:["1 m/s","4 m/s","2 m/s","3 m/s"],answer:2},
+      {q:"Which of the following is not true for distance (S) and displacement (D)?",options:["S = d","S < d","S > d","S = positive"],answer:1},
+      {q:"A cricket ball is hit so that it travels straight up in air and it acquires 3 seconds to reach the maximum height. Its initial velocity is",options:["10ms⁻¹","29.4ms⁻¹","15ms⁻¹","12.2ms⁻¹"],answer:1},
+      {q:"An object is thrown in horizontal with an initial velocity Vᵢ = 10 m/s from the roof of a building 20 m tall. How far from the building does it hit the ground?",options:["5 m","15 m","10 m","20 m"],answer:3},
+      {q:"What will be the magnitude of acceleration produced in the body if the body has a mass of 2 Kg? (Forces: 3N left, 2N left, 4N right, 7N right)",options:["2.5 ms⁻²","12 ms⁻²","3 ms⁻²","zero"],answer:2},
+      {q:"A student drops a pebble from the edge of a vertical cliff. The pebble hits the ground 4 s after it was dropped. What is the height of the cliff?",options:["20 m","60 m","40 m","80 m"],answer:3},
+      {q:"Range of a projectile on a horizontal plane is same for the following pair of angles:",options:["15° and 18°","20° and 80°","43° and 47°","52° and 62°"],answer:2},
+      {q:"Newton's 2nd gives the measurement of:",options:["Acceleration","Momentum","force","inertia"],answer:2},
+      {q:"Two forces each of magnitude 10N acting on a string in opposite direction, the tension in the string is:",options:["10N","40 N","20 N","0 N"],answer:0},
+      {q:"Distance covered by a freely falling body in 2 sec will be:",options:["4.9 m","19.6 m","3.92 m","44.1 m"],answer:1},
+      {q:"For flat earth approximation and ignoring air friction; the trajectory of the projectile is:",options:["Straight line","Elliptic","Parabolic","Hyperbolic"],answer:2},
+      {q:"The time taken by the projectile to reach its maximum height is:",options:["2visinθ/g","visinθ/g","vicosθ/g","2vicosθ/g"],answer:1},
+      {q:"A two-car train with car A (3Kg) and car B (1Kg) is pulled by a child on a horizontal frictionless surface with 20N. The strings are massless. The force exerted by car A on the string S is:",options:["10N","20N","zero","15 N"],answer:3},
+    ];
+
+    // Answer key: B,D,A,D,B,C,D,B,B,C,A,A,C,D,A,A,A,D,D,D,B,A,C,B,C,D,B,D,B,B,A,D,D,C,B,B,C,B,B,B,D,C,D,C,A,B,C,B,D
+    const ansKey=[1,3,0,3,1,2,3,1,1,2,0,0,2,3,0,0,0,3,3,3,1,0,2,1,2,3,1,3,1,1,0,3,3,2,1,1,2,1,1,1,3,2,3,2,0,1,2,1,3];
+    ansKey.forEach((a,i)=>{ if(questions[i]) questions[i].answer=a; });
+
+    let correct=0,wrong=0,answered=0;
+    const total=questions.length;
+    const TOTAL_SECONDS=50*60;
+    let timeLeft=TOTAL_SECONDS,timerInterval=null;
+
+    function startTimer(){
+      timerInterval=setInterval(()=>{
+        timeLeft--;updateTimerDisplay();
+        if(timeLeft<=0){clearInterval(timerInterval);autoSubmit();}
+      },1000);
+    }
+    function updateTimerDisplay(){
+      const m=Math.floor(timeLeft/60),s=timeLeft%60;
+      const d=document.getElementById('timerDisplay'),f=document.getElementById('timerFill');
+      d.textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+      f.style.width=((timeLeft/TOTAL_SECONDS)*100)+'%';
+      d.className='timer-display'; f.className='timer-fill';
+      if(timeLeft<=300){d.classList.add('danger');f.classList.add('warn');}
+      else if(timeLeft<=600){d.classList.add('warning');f.classList.add('warn');}
+    }
+    function autoSubmit(){
+      questions.forEach((q,i)=>{
+        const opts=document.getElementById('opts-'+i);
+        if(!opts.dataset.answered){opts.dataset.answered='1';opts.querySelectorAll('.option').forEach(o=>o.classList.add('disabled'));opts.querySelectorAll('.option')[q.answer].classList.add('correct');}
+      });setTimeout(showResult,600);
+    }
+    function buildQuiz(){
+      const area=document.getElementById('quizArea');area.innerHTML='';
+      questions.forEach((q,i)=>{
+        const letters=['A','B','C','D'];
+        const card=document.createElement('div');card.className='question-card';card.style.animationDelay=(i*0.015)+'s';
+        card.innerHTML=`<div class="q-number">Question ${i+1} of ${total}</div><div class="q-text">${i+1}. ${q.q}</div><div class="options" id="opts-${i}">${q.options.map((o,j)=>`<div class="option" onclick="selectAnswer(${i},${j})"><div class="option-letter">${letters[j]}</div><span>${o}</span></div>`).join('')}</div>`;
+        area.appendChild(card);
+      });
+    }
+    function selectAnswer(qi,oi){
+      const q=questions[qi],opts=document.getElementById('opts-'+qi);
+      if(opts.dataset.answered)return;opts.dataset.answered='1';answered++;
+      const all=opts.querySelectorAll('.option');all.forEach(o=>o.classList.add('disabled'));
+      if(oi===q.answer){all[oi].classList.add('correct');correct++;}
+      else{all[oi].classList.add('wrong');all[q.answer].classList.add('correct');wrong++;}
+      updateScore();if(answered===total)setTimeout(showResult,800);
+    }
+    function updateScore(){
+      document.getElementById('scoreTotal').textContent=correct;
+      document.getElementById('scoreCorrect').textContent=correct;
+      document.getElementById('scoreWrong').textContent=wrong;
+      document.getElementById('scoreRemaining').textContent=total-answered;
+      document.getElementById('progressFill').style.width=((answered/total)*100)+'%';
+    }
+    function showResult(){
+      clearInterval(timerInterval);
+      document.getElementById('quizArea').style.display='none';
+      document.getElementById('resultPanel').style.display='block';
+      const acc=Math.round((correct/total)*100);
+      document.getElementById('rScore').textContent=correct+'/'+total;
+      document.getElementById('rCorrect').textContent=correct;
+      document.getElementById('rWrong').textContent=wrong;
+      document.getElementById('rAccuracy').textContent=acc+'%';
+      const e=acc>=80?'🏆':acc>=60?'👍':acc>=40?'📚':'💪';
+      const t=acc>=80?'Excellent!':acc>=60?'Good Job!':acc>=40?'Keep Studying!':'Keep Practicing!';
+      document.getElementById('resultEmoji').textContent=e;
+      document.getElementById('resultTitle').textContent=t;
+      document.getElementById('resultSub').textContent=`You scored ${correct} out of ${total} — Accuracy: ${acc}%`;
+    }
+    function restartQuiz(){
+      clearInterval(timerInterval);correct=0;wrong=0;answered=0;timeLeft=TOTAL_SECONDS;
+      updateTimerDisplay();document.getElementById('resultPanel').style.display='none';
+      document.getElementById('quizArea').style.display='block';updateScore();buildQuiz();startTimer();
+      window.scrollTo({top:0,behavior:'smooth'});
+    }
+    buildQuiz();startTimer();
+  </script>
+</body>
+</html>
