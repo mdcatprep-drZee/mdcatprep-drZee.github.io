@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chemistry — Fundamental Concepts Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --card: #1c2128;
+    --border: #30363d;
+    --accent: #58a6ff;
+    --accent2: #3fb950;
+    --danger: #f85149;
+    --warning: #d29922;
+    --purple: #bc8cff;
+    --text: #e6edf3;
+    --muted: #7d8590;
+    --radius: 14px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Header ── */
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .brand {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.5px;
+  }
+  .brand span { color: var(--muted); font-weight: 400; font-size: 0.8rem; margin-left: 8px; }
+
+  .timer-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    padding: 7px 16px;
+  }
+  .timer-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent2);
+    animation: breathe 2s ease-in-out infinite;
+  }
+  @keyframes breathe { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
+  #timer-display {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--text);
+    transition: color 0.3s;
+    min-width: 54px;
+  }
+  #timer-display.warn { color: var(--warning); }
+  #timer-display.crit { color: var(--danger); animation: blink 0.8s step-start infinite; }
+  @keyframes blink { 50%{opacity:0.3} }
+
+  /* ── Progress bar ── */
+  .progress-strip {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 8px 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .track {
+    flex: 1;
+    height: 5px;
+    background: var(--border);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--purple));
+    border-radius: 99px;
+    transition: width 0.5s cubic-bezier(.4,0,.2,1);
+    width: 0%;
+  }
+  .prog-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  /* ── Main ── */
+  main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 20px;
+  }
+
+  /* ── Start Screen ── */
+  #start-screen {
+    text-align: center;
+    max-width: 480px;
+    width: 100%;
+  }
+  .start-icon { font-size: 3.5rem; margin-bottom: 20px; }
+  .start-title {
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 12px;
+    background: linear-gradient(135deg, var(--accent), var(--purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .start-sub { color: var(--muted); font-size: 0.95rem; line-height: 1.6; margin-bottom: 28px; }
+  .info-chips {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+  }
+  .chip {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    padding: 6px 16px;
+    font-size: 0.8rem;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .chip b { color: var(--text); }
+  .start-btn {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+    background: var(--accent);
+    color: #000;
+    border: none;
+    padding: 16px 48px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.2s;
+    box-shadow: 0 4px 20px rgba(88,166,255,0.35);
+  }
+  .start-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(88,166,255,0.45); }
+
+  /* ── Question Card ── */
+  #quiz-screen { display: none; width: 100%; max-width: 640px; }
+
+  .q-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px;
+    width: 100%;
+    animation: slideUp 0.35s cubic-bezier(.4,0,.2,1);
+  }
+  @keyframes slideUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+
+  .q-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 22px;
+  }
+  .q-counter {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--muted);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    padding: 4px 12px;
+  }
+  .q-counter span { color: var(--accent); font-weight: 600; }
+
+  .q-text {
+    font-size: 1.05rem;
+    font-weight: 600;
+    line-height: 1.65;
+    margin-bottom: 24px;
+    color: var(--text);
+  }
+
+  /* Options */
+  .options { display: flex; flex-direction: column; gap: 10px; }
+
+  .opt {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.18s;
+    user-select: none;
+  }
+  .opt:hover { border-color: var(--accent); background: #1c2a3a; }
+  .opt input { display: none; }
+
+  .opt-letter {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    font-weight: 500;
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    color: var(--muted);
+    transition: all 0.18s;
+    background: var(--card);
+  }
+  .opt.selected { border-color: var(--accent); background: #1c2a3a; }
+  .opt.selected .opt-letter { border-color: var(--accent); background: var(--accent); color: #000; font-weight: 700; }
+
+  /* Feedback */
+  .opt.correct { border-color: var(--accent2) !important; background: #0f2a1a !important; pointer-events: none; }
+  .opt.correct .opt-letter { border-color: var(--accent2); background: var(--accent2); color: #000; font-weight: 700; }
+  .opt.wrong { border-color: var(--danger) !important; background: #2a0f0f !important; pointer-events: none; }
+  .opt.wrong .opt-letter { border-color: var(--danger); background: var(--danger); color: #fff; font-weight: 700; }
+  .opt.show-correct { border-color: var(--accent2) !important; background: #0f2a1a !important; pointer-events: none; }
+  .opt.show-correct .opt-letter { border-color: var(--accent2); background: var(--accent2); color: #000; }
+  .opt.disabled { pointer-events: none; opacity: 0.6; }
+
+  .opt-text { font-size: 0.92rem; line-height: 1.45; }
+
+  /* Feedback banner */
+  .feedback {
+    display: none;
+    margin-top: 16px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    align-items: center;
+    gap: 8px;
+  }
+  .feedback.show { display: flex; }
+  .feedback.correct-fb { background: #0f2a1a; border: 1px solid var(--accent2); color: var(--accent2); }
+  .feedback.wrong-fb { background: #2a0f0f; border: 1px solid var(--danger); color: var(--danger); }
+  .feedback.skip-fb { background: #1a1a0f; border: 1px solid var(--warning); color: var(--warning); }
+
+  /* Navigation */
+  .nav-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 24px;
+    gap: 12px;
+  }
+  .nav-btn {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    cursor: pointer;
+    transition: all 0.18s;
+  }
+  #prev-btn {
+    background: var(--surface);
+    color: var(--muted);
+    border: 1px solid var(--border);
+  }
+  #prev-btn:hover { color: var(--text); border-color: var(--muted); }
+  #prev-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+  #next-btn {
+    background: var(--accent);
+    color: #000;
+    flex: 1;
+    max-width: 200px;
+    box-shadow: 0 2px 12px rgba(88,166,255,0.3);
+  }
+  #next-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 18px rgba(88,166,255,0.4); }
+  #next-btn.finish { background: var(--accent2); box-shadow: 0 2px 12px rgba(63,185,80,0.3); }
+
+  /* ── Result Screen ── */
+  #result-screen {
+    display: none;
+    width: 100%;
+    max-width: 560px;
+    text-align: center;
+  }
+  .result-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 40px 32px;
+    animation: slideUp 0.5s ease;
+  }
+  .result-emoji { font-size: 3rem; margin-bottom: 16px; }
+  .result-heading {
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-bottom: 6px;
+  }
+  .result-sub-text { color: var(--muted); font-size: 0.9rem; margin-bottom: 28px; }
+
+  .score-circle {
+    width: 130px; height: 130px;
+    border-radius: 50%;
+    border: 5px solid var(--accent);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    margin: 0 auto 28px;
+    background: radial-gradient(circle, #1c2a3a, var(--card));
+    box-shadow: 0 0 30px rgba(88,166,255,0.2);
+  }
+  .score-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .score-denom { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .stat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 8px;
+  }
+  .stat .val { font-family: 'JetBrains Mono', monospace; font-size: 1.6rem; font-weight: 700; }
+  .stat .lbl { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 3px; }
+  .stat.c .val { color: var(--accent2); }
+  .stat.w .val { color: var(--danger); }
+  .stat.s .val { color: var(--warning); }
+
+  .grade-banner {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 24px;
+  }
+
+  .result-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn-retry {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    background: var(--accent);
+    color: #000;
+    border: none;
+    padding: 13px 32px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+  .btn-retry:hover { transform: translateY(-2px); }
+  .btn-review {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    padding: 13px 32px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .btn-review:hover { color: var(--text); border-color: var(--muted); }
+
+  /* ── Timeout overlay ── */
+  #timeout-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.88);
+    z-index: 999;
+    align-items: center; justify-content: center;
+  }
+  #timeout-overlay.show { display: flex; }
+  .timeout-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 40px 48px;
+    text-align: center;
+    max-width: 360px;
+    width: 90%;
+    animation: slideUp 0.4s ease;
+  }
+  .timeout-box h2 { font-size: 1.6rem; font-weight: 800; color: var(--danger); margin: 12px 0 8px; }
+  .timeout-box p { color: var(--muted); font-size: 0.9rem; margin-bottom: 20px; }
+  .timeout-ok {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    background: var(--accent);
+    color: #000;
+    border: none;
+    padding: 13px 32px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+  }
+
+  /* Mini nav dots */
+  .dots-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  .dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--border);
+    transition: background 0.2s, transform 0.2s;
+    cursor: pointer;
+  }
+  .dot.answered { background: var(--accent); }
+  .dot.current { transform: scale(1.5); background: var(--purple); }
+  .dot.correct-dot { background: var(--accent2); }
+  .dot.wrong-dot { background: var(--danger); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">Chemistry Quiz <span>Fundamental Concepts</span></div>
+  <div class="timer-pill">
+    <div class="timer-dot" id="timer-dot"></div>
+    <div id="timer-display">30:00</div>
+  </div>
+</header>
+
+<div class="progress-strip">
+  <div class="track"><div class="fill" id="fill"></div></div>
+  <div class="prog-label" id="prog-label">0 / 60</div>
+</div>
+
+<main>
+  <!-- Start Screen -->
+  <div id="start-screen">
+    <div class="start-icon">⚗️</div>
+    <div class="start-title">Fundamental Concepts<br>of Chemistry</div>
+    <p class="start-sub">Test your knowledge on moles, stoichiometry, isotopes, atomic structure, and more.</p>
+    <div class="info-chips">
+      <div class="chip">🧪 <b>60</b> Questions</div>
+      <div class="chip">⏱ <b>30</b> Minutes</div>
+      <div class="chip">🎯 One at a time</div>
+      <div class="chip">✅ Auto-checked</div>
+    </div>
+    <button class="start-btn" onclick="startQuiz()">Start Quiz →</button>
+  </div>
+
+  <!-- Quiz Screen -->
+  <div id="quiz-screen">
+    <div class="dots-row" id="dots-row"></div>
+    <div class="q-card" id="q-card">
+      <div class="q-meta">
+        <div class="q-counter">Question <span id="q-num">1</span> of 60</div>
+      </div>
+      <div class="q-text" id="q-text"></div>
+      <div class="options" id="options"></div>
+      <div class="feedback" id="feedback"></div>
+      <div class="nav-row">
+        <button class="nav-btn" id="prev-btn" onclick="goTo(currentQ - 1)">← Back</button>
+        <button class="nav-btn" id="next-btn" onclick="handleNext()">Next →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Result Screen -->
+  <div id="result-screen">
+    <div class="result-card">
+      <div class="result-emoji" id="result-emoji">🎉</div>
+      <div class="result-heading" id="result-heading">Result</div>
+      <div class="result-sub-text" id="result-sub"></div>
+      <div class="score-circle">
+        <div class="score-num" id="score-num">0</div>
+        <div class="score-denom">out of 60</div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat c"><div class="val" id="r-correct">0</div><div class="lbl">Correct</div></div>
+        <div class="stat w"><div class="val" id="r-wrong">0</div><div class="lbl">Wrong</div></div>
+        <div class="stat s"><div class="val" id="r-skip">0</div><div class="lbl">Skipped</div></div>
+      </div>
+      <div class="grade-banner" id="grade-banner"></div>
+      <div class="result-actions">
+        <button class="btn-retry" onclick="retryQuiz()">↺ Retry Quiz</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div id="timeout-overlay">
+  <div class="timeout-box">
+    <div style="font-size:2.5rem">⏰</div>
+    <h2>Time's Up!</h2>
+    <p>Your 30-minute quiz has ended and answers have been auto-submitted.</p>
+    <button class="timeout-ok" onclick="dismissTimeout()">View Results</button>
+  </div>
+</div>
+
+<script>
+const questions = [
+  { q: "The breakdown of molecular ions from natural products gives important information about:", opts: ["size","position","shape","structure"], ans: "D" },
+  { q: "If we are given with the mass of a substance, we can calculate ________ of other substance with the help of a balanced chemical equation.", opts: ["mass","volume","moles","all of these"], ans: "D" },
+  { q: "The number of neutrons in H₂SO₄ are:", opts: ["5","49","48","44"], ans: "C" },
+  { q: "Isotopes are the atoms of same element having different number of:", opts: ["electron","proton","positron","neutron"], ans: "D" },
+  { q: "What is the mass of one mole of aspartame having formula C₁₄H₁₈N₂O₅?", opts: ["4g","40g","50g","1g"], ans: "C" },
+  { q: "If 9.8 g of sulfuric acid dissolved in excess quantity of water, it will yield _____ moles of hydrogen ion (H⁺) and _____ mole of sulphate ions (SO₄²⁻):", opts: ["0.1, 0.2","0.1, 0.3","0.2, 0.4","0.2, 0.1"], ans: "D" },
+  { q: "Limiting reactant controls the amount of:", opts: ["reactant","products","both A & B","none of these"], ans: "B" },
+  { q: "Actual yield is always less than theoretical yield due to:", opts: ["operational losses","reaction reversibility","side reaction","all of these"], ans: "D" },
+  { q: "It is the fact that 22.414 dm³ of any gas has different masses but the same number of:", opts: ["atoms","particles","molecules","none of these"], ans: "C" },
+  { q: "Which of the following has six isotopes?", opts: ["palladium","tin","cadmium","carbon"], ans: "C" },
+  { q: "The unit used to express the relative atomic mass is called:", opts: ["gram unit","Avogadro's number","atomic mass","atomic mass unit"], ans: "D" },
+  { q: "X-ray work in 20th century shows that diameter of the atoms are of the order:", opts: [".1nm",".2nm",".3nm",".4nm"], ans: "B" },
+  { q: "The smallest number of molecules are present in:", opts: ["3.6g of H₂","4.8g of C₂H₅OH","2.8g of CO","5.4g of N₂O₅"], ans: "D" },
+  { q: "Chemical equations do not tell about the ________ because of certain limitations.", opts: ["rate of reaction","pressure","conditions","both A & C"], ans: "D" },
+  { q: "The study of composition of pure substance in 17th century clearly shows that few elements are components of many substances:", opts: ["qualitative","quantitative","both A & B","extensive"], ans: "B" },
+  { q: "The efficiency of a chemical reactions can be checked by calculating its _____ yields:", opts: ["percentage","actual","theoretical","all of these"], ans: "A" },
+  { q: "27 g of Al will react with how much mass of O₂ to produce Al₂O₃?", opts: ["8g of oxygen","16g of oxygen","32g of oxygen","24g of oxygen"], ans: "D" },
+  { q: "In stoichiometry, we follow law of ________ while doing calculations.", opts: ["conservation of mass","definite proportion","both A & B","none of these"], ans: "C" },
+  { q: "Glucose (C₆H₁₂O₆) is the most important nutrient in a cell for generating chemical potential energy. What is the mass percent of carbon in 1.5g of sample?", opts: ["33%","40%","53.3%","6.67%"], ans: "B" },
+  { q: "The negative ions having group of atoms is/are:", opts: ["OH⁻","CO₃²⁻","Cr₂O₇²⁻","all of these"], ans: "D" },
+  { q: "Atomicity is determined by number of _______ present in a molecule:", opts: ["dots","atoms","sub particles","electrons"], ans: "B" },
+  { q: "The mass of one mole of electron is:", opts: ["1.8mg","0.184mg","0.55mg","0.64mg"], ans: "C" },
+  { q: "The number of atoms present in a molecule determines its:", opts: ["shape","size","molecularity","atomicity"], ans: "D" },
+  { q: "Avogadro's hypothesis is applicable to ______ only.", opts: ["all gases","inert gases","ideal gases","light gases"], ans: "C" },
+  { q: "Greater the number of moles, ______ will be the number of molecules:", opts: ["lesser","moderate","greater","equal"], ans: "C" },
+  { q: "In the gaseous state, the distance between the molecules is ___ times _____ than their diameters.", opts: ["2, lesser","3, lesser","3, greater","2, greater"], ans: "C" },
+  { q: "The relative atomic mass of copper is:", opts: ["63.345amu","63.455amu","63.55amu","63.456amu"], ans: "C" },
+  { q: "Different kind of atoms of same element are called isotope having different _____ but same _____ properties:", opts: ["physical, atomic","physical, chemical","chemical, physical","chemical, atomic"], ans: "B" },
+  { q: "18g of water contains ________ atoms of hydrogen:", opts: ["6.022×10²³","3×6.022×10²³","2×6.022×10²³","4×6.22×10²³"], ans: "C" },
+  { q: "Empirical formula and molecular formula of covalent molecule is:", opts: ["different","same","variable","equal"], ans: "B" },
+  { q: "What is the empirical formula for the molecular formula C₅H₁₂?", opts: ["C₅H₁₂","C₅H₆","CH₂","C₂.₅H₆"], ans: "A" },
+  { q: "Empirical formula of glucose C₆H₁₂O₆ is same with:", opts: ["acetaldehyde","formaldehyde","ethanol","acetone"], ans: "B" },
+  { q: "A mole of a substance contains ______ particles:", opts: ["6.2×10²²","6.22×10²²","6.02×10²³","6.5×10²²"], ans: "C" },
+  { q: "The peaks formed in a mass spectrograph shows number of ________ of an element:", opts: ["electrons","isotopes","protons","neutrons"], ans: "B" },
+  { q: "In stoichiometry, we follow law of ________ while doing calculations.", opts: ["conservation of mass","definite proportion","both A & B","none of these"], ans: "C" },
+  { q: "The smallest number of molecules are present in:", opts: ["3.6g of H₂","4.8g of C₂H₅OH","2.8g of CO","5.4g of N₂O₅"], ans: "D" },
+  { q: "1 amu is equal to:", opts: [".666×10⁻²⁷kg","1.661×10²⁸kg","1.661×10²⁷kg","1.661×10⁻²⁷kg"], ans: "D" },
+  { q: "The concept of ________ of gases helps to relate solids and liquids in a quantitative manner.", opts: ["density","molar volume","pressure","temperature"], ans: "B" },
+  { q: "In Al₂S₃, the valency of Al is:", opts: ["2","3","-3","-2"], ans: "B" },
+  { q: "An ordinary microscope can measure the size of an object up to or above:", opts: ["25nm","45nm","5nm","6nm"], ans: "C" },
+  { q: "The most common positive ions are formed by the atoms:", opts: ["non metals","metals","noble gases","Hydrogen"], ans: "B" },
+  { q: "The formation of negative ion is a/an _____ process:", opts: ["exothermic","endothermic","both A & B","none of these"], ans: "A" },
+  { q: "During combustion analysis MgClO₄ is used to absorb:", opts: ["oxygen gas","hydrogen gas","water vapors","alcohol"], ans: "C" },
+  { q: "A full stop may have _______ atoms present in it:", opts: ["one million","two millions","one billion","two billions"], ans: "B" },
+  { q: "A molecule of water has two bonds, so 1 mole of water will contain _____ moles of bonds:", opts: ["1","2","3","4"], ans: "B" },
+  { q: "The relative abundance of isotopes of elements is measured by:", opts: ["atomic spectroscopy","ionic spectroscopy","mass spectroscopy","mass spectrometry"], ans: "D" },
+  { q: "Heavy water contains isotope of Hydrogen:", opts: ["protium","deuterium","tritium","both A & C"], ans: "B" },
+  { q: "For the identification of isotopes of elements having solid state:", opts: ["Aston spectrometer","Dempster's mass spectrometer","Soddy mass spectrometer","atomic spectrometer"], ans: "B" },
+  { q: "The number of charges present on a cation depends on number of electrons _____ by the atom:", opts: ["gain","lost","accept","produced"], ans: "B" },
+  { q: "Calculate mass in grams of 8.694 moles of Ag₂CO₃:", opts: ["1417.53g","2399.544g","3456.78g","1231.98g"], ans: "B" },
+  { q: "Which of the uranium isotope has larger mass?", opts: ["6.22×10²³ atoms of U-235","6.22×10²³ atoms of U-238","6.22×10²³ atoms of U-234","all of these"], ans: "B" },
+  { q: "Which one of them is used as an automobile antifreeze?", opts: ["Ethanol","ethene","ethylene glycol","propene"], ans: "C" },
+  { q: "________ conducts nerve impulse in brain:", opts: ["serotonin","aspartame","ascorbic acid","hydrazine"], ans: "A" },
+  { q: "The reactant which consumes completely in a reaction is known as _____ reactant:", opts: ["fractional","initial","limiting","minor"], ans: "C" },
+  { q: "Nitrogen N₂ has _____ number of electrons, protons and neutrons:", opts: ["7,8,9","7,7,7","14,14,14","14,14,15"], ans: "C" },
+  { q: "The volume at S.T.P occupied by 0.8g of N₂:", opts: ["2.24dm³","6.44dm³","1.12dm³","112dm³"], ans: "B" },
+  { q: "A sample of 0.7mol of metal M reacts completely with excess of fluorine to form 45g of MF₂. How many moles of F are present in it?", opts: ["1.4 moles","2.4 moles","2 moles","1.2 moles"], ans: "A" },
+  { q: "_______ is a macromolecule found in blood:", opts: ["Hemoglobin","plasma","creatinine","plasmids"], ans: "A" },
+  { q: "Total number of neutrons in 5g of D₂O (D is H):", opts: [".25NA","1.1NA","2.5NA",".5NA"], ans: "C" },
+  { q: "Out of 288 natural isotopes, how many have even atomic number and mass number?", opts: ["152","153","154","155"], ans: "C" },
+  { q: "2 moles of octane (C₈H₁₈) burns with 25 moles of oxygen (O₂) and produced _____ moles of carbon dioxide along with 18 moles of water:", opts: ["14","16","18","2"], ans: "B" },
+  { q: "Formula mass is considered for _____ compounds instead of their molecular mass:", opts: ["metallic","ionic","covalent","polar covalent"], ans: "B" },
+  { q: "The atoms of hemoglobin is heavier than H-atoms:", opts: ["67,000 times","68,000 times","65,000 times","69,000 times"], ans: "B" },
+  { q: "If number of molecules of different gases are same at S.T.P, the occupied volume will be:", opts: ["greater","same","smaller","twice"], ans: "B" }
+];
+
+const TOTAL_TIME = 30 * 60;
+let currentQ = 0;
+let userAnswers = new Array(questions.length).fill(null);
+let checked = new Array(questions.length).fill(false);
+let timerInterval;
+let timeLeft = TOTAL_TIME;
+let quizStarted = false;
+let quizDone = false;
+
+function startQuiz() {
+  document.getElementById('start-screen').style.display = 'none';
+  document.getElementById('quiz-screen').style.display = 'block';
+  buildDots();
+  renderQuestion(0);
+  startTimer();
+  quizStarted = true;
+}
+
+function buildDots() {
+  const row = document.getElementById('dots-row');
+  row.innerHTML = '';
+  questions.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot';
+    d.title = `Q${i+1}`;
+    d.onclick = () => goTo(i);
+    d.id = `dot-${i}`;
+    row.appendChild(d);
+  });
+}
+
+function updateDots() {
+  questions.forEach((_, i) => {
+    const d = document.getElementById(`dot-${i}`);
+    d.className = 'dot';
+    if (i === currentQ) d.classList.add('current');
+    else if (checked[i]) {
+      const correct = userAnswers[i] === questions[i].ans;
+      d.classList.add(correct ? 'correct-dot' : 'wrong-dot');
+    } else if (userAnswers[i]) {
+      d.classList.add('answered');
+    }
+  });
+}
+
+function renderQuestion(index) {
+  currentQ = index;
+  const q = questions[index];
+  document.getElementById('q-num').textContent = index + 1;
+  document.getElementById('q-text').textContent = q.q;
+
+  const letters = ['A','B','C','D'];
+  const optDiv = document.getElementById('options');
+  optDiv.innerHTML = q.opts.map((opt, j) => `
+    <label class="opt${userAnswers[index] === letters[j] ? ' selected' : ''}" id="opt-${j}" onclick="selectOpt(${j})">
+      <input type="radio" name="q" value="${letters[j]}" ${userAnswers[index] === letters[j] ? 'checked' : ''}>
+      <div class="opt-letter">${letters[j]}</div>
+      <span class="opt-text">${opt}</span>
+    </label>
+  `).join('');
+
+  // If already checked, restore visual state
+  const fb = document.getElementById('feedback');
+  fb.className = 'feedback';
+  fb.textContent = '';
+
+  if (checked[index]) {
+    applyCheckedState(index, false);
+  }
+
+  // Progress
+  const answered = userAnswers.filter(a => a !== null).length;
+  document.getElementById('fill').style.width = (answered / questions.length * 100) + '%';
+  document.getElementById('prog-label').textContent = `${answered} / ${questions.length}`;
+
+  // Buttons
+  document.getElementById('prev-btn').disabled = index === 0;
+  const nextBtn = document.getElementById('next-btn');
+  if (index === questions.length - 1) {
+    nextBtn.textContent = 'Finish ✓';
+    nextBtn.classList.add('finish');
+  } else {
+    nextBtn.textContent = 'Next →';
+    nextBtn.classList.remove('finish');
+  }
+
+  updateDots();
+
+  // Animate card
+  const card = document.getElementById('q-card');
+  card.style.animation = 'none';
+  card.offsetHeight;
+  card.style.animation = 'slideUp 0.3s cubic-bezier(.4,0,.2,1)';
+}
+
+function selectOpt(j) {
+  if (checked[currentQ] || quizDone) return;
+  const letters = ['A','B','C','D'];
+  userAnswers[currentQ] = letters[j];
+
+  document.querySelectorAll('.opt').forEach((el, i) => {
+    el.classList.toggle('selected', i === j);
+  });
+
+  // Auto-check immediately on selection
+  checkAnswer(currentQ);
+}
+
+function checkAnswer(index) {
+  if (checked[index]) return;
+  checked[index] = true;
+  applyCheckedState(index, true);
+  updateDots();
+
+  // Update progress
+  const answered = userAnswers.filter(a => a !== null).length;
+  document.getElementById('fill').style.width = (answered / questions.length * 100) + '%';
+  document.getElementById('prog-label').textContent = `${answered} / ${questions.length}`;
+}
+
+function applyCheckedState(index, animate) {
+  const q = questions[index];
+  const letters = ['A','B','C','D'];
+  const correctIdx = letters.indexOf(q.ans);
+  const userAns = userAnswers[index];
+  const opts = document.querySelectorAll('.opt');
+  const fb = document.getElementById('feedback');
+
+  opts.forEach(o => o.classList.add('disabled'));
+
+  if (!userAns) {
+    // Skipped — show correct
+    opts[correctIdx].classList.add('show-correct');
+    fb.className = 'feedback skip-fb show';
+    fb.innerHTML = `⚠ Skipped — Correct answer: <strong>${q.ans}. ${q.opts[correctIdx]}</strong>`;
+  } else if (userAns === q.ans) {
+    const selIdx = letters.indexOf(userAns);
+    opts[selIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✓ Correct!`;
+  } else {
+    const selIdx = letters.indexOf(userAns);
+    opts[selIdx].classList.add('wrong');
+    opts[correctIdx].classList.add('show-correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `✗ Wrong — Correct answer: <strong>${q.ans}. ${q.opts[correctIdx]}</strong>`;
+  }
+}
+
+function handleNext() {
+  // Check unanswered before moving
+  if (!checked[currentQ]) {
+    // Mark as skipped and check
+    checkAnswer(currentQ);
+    // Brief pause then advance
+    setTimeout(() => {
+      if (currentQ < questions.length - 1) goTo(currentQ + 1);
+      else finishQuiz();
+    }, 900);
+    return;
+  }
+
+  if (currentQ < questions.length - 1) goTo(currentQ + 1);
+  else finishQuiz();
+}
+
+function goTo(index) {
+  if (index < 0 || index >= questions.length) return;
+  renderQuestion(index);
+}
+
+function finishQuiz() {
+  quizDone = true;
+  clearInterval(timerInterval);
+
+  let correct = 0, wrong = 0, skip = 0;
+  questions.forEach((q, i) => {
+    if (!userAnswers[i]) skip++;
+    else if (userAnswers[i] === q.ans) correct++;
+    else wrong++;
+  });
+
+  const pct = Math.round((correct / questions.length) * 100);
+
+  document.getElementById('score-num').textContent = correct;
+  document.getElementById('r-correct').textContent = correct;
+  document.getElementById('r-wrong').textContent = wrong;
+  document.getElementById('r-skip').textContent = skip;
+
+  let emoji, heading, sub, grade;
+  if (pct >= 90) { emoji='🏆'; heading='Outstanding!'; sub='Exceptional performance!'; grade='You are MDCAT ready for this topic.'; }
+  else if (pct >= 75) { emoji='🎯'; heading='Great Work!'; sub='Strong chemistry foundation.'; grade='A few more revisions and you\'re set.'; }
+  else if (pct >= 60) { emoji='📚'; heading='Good Effort'; sub='Decent score with room to improve.'; grade='Review the concepts you got wrong.'; }
+  else if (pct >= 40) { emoji='💪'; heading='Keep Practicing'; sub='You need more practice.'; grade='Go through your notes again carefully.'; }
+  else { emoji='📖'; heading='Needs More Study'; sub='Significant revision required.'; grade='Re-read the chapter thoroughly and retry.'; }
+
+  document.getElementById('result-emoji').textContent = emoji;
+  document.getElementById('result-heading').textContent = heading;
+  document.getElementById('result-sub').textContent = `${pct}% — ${sub}`;
+  document.getElementById('grade-banner').textContent = grade;
+
+  document.getElementById('quiz-screen').style.display = 'none';
+  document.getElementById('result-screen').style.display = 'block';
+  document.getElementById('result-screen').scrollIntoView({ behavior: 'smooth' });
+}
+
+function startTimer() {
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    const m = Math.floor(timeLeft / 60);
+    const s = timeLeft % 60;
+    const display = document.getElementById('timer-display');
+    display.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    display.className = '';
+    if (timeLeft <= 300) display.classList.add('warn');
+    if (timeLeft <= 60) display.classList.add('crit');
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      // Check all unanswered
+      questions.forEach((_, i) => { if (!checked[i]) checkAnswer(i); });
+      document.getElementById('timeout-overlay').classList.add('show');
+    }
+  }, 1000);
+}
+
+function dismissTimeout() {
+  document.getElementById('timeout-overlay').classList.remove('show');
+  finishQuiz();
+}
+
+function retryQuiz() {
+  currentQ = 0;
+  userAnswers = new Array(questions.length).fill(null);
+  checked = new Array(questions.length).fill(false);
+  timeLeft = TOTAL_TIME;
+  quizDone = false;
+  clearInterval(timerInterval);
+  document.getElementById('timer-display').textContent = '30:00';
+  document.getElementById('timer-display').className = '';
+  document.getElementById('result-screen').style.display = 'none';
+  document.getElementById('quiz-screen').style.display = 'block';
+  buildDots();
+  renderQuestion(0);
+  startTimer();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
