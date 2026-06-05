@@ -268,7 +268,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
-    import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+    import { getFirestore, doc, setDoc, getDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyAqLKpVldxBvGnIgVK6N2BAjmIHRNNZ3dw",
@@ -284,9 +284,35 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // Redirect if already logged in
-    onAuthStateChanged(auth, user => {
-      if (user) window.location.href = 'index.html';
+    // Redirect if already logged in + ensure DB record exists
+    onAuthStateChanged(auth, async user => {
+      if (user) {
+        try {
+          const snap = await getDoc(doc(db, 'students', user.uid));
+          if (!snap.exists()) {
+            // User in Auth but not in DB — auto-create their record
+            await setDoc(doc(db, 'students', user.uid), {
+              name: user.displayName || user.email.split('@')[0],
+              email: user.email,
+              phone: 'N/A',
+              city: 'N/A',
+              targetScore: 'N/A',
+              joinedAt: serverTimestamp(),
+              quizScores: [],
+              lastActive: serverTimestamp(),
+              note: 'Auto-recovered — registered before DB fix'
+            });
+          } else {
+            // Update lastActive on every login
+            await updateDoc(doc(db, 'students', user.uid), {
+              lastActive: serverTimestamp()
+            });
+          }
+        } catch(err) {
+          console.warn('DB sync error:', err);
+        }
+        window.location.href = 'index.html';
+      }
     });
 
     window.switchTab = (tab) => {
