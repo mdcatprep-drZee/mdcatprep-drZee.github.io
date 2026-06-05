@@ -465,13 +465,13 @@
   <div class="brand">Chemistry Quiz <span>Fundamental Concepts</span></div>
   <div class="timer-pill">
     <div class="timer-dot" id="timer-dot"></div>
-    <div id="timer-display">30:00</div>
+    <div id="timer-display">64:00</div>
   </div>
 </header>
 
 <div class="progress-strip">
   <div class="track"><div class="fill" id="fill"></div></div>
-  <div class="prog-label" id="prog-label">0 / 60</div>
+  <div class="prog-label" id="prog-label">0 / 64</div>
 </div>
 
 <main>
@@ -481,8 +481,8 @@
     <div class="start-title">Fundamental Concepts<br>of Chemistry</div>
     <p class="start-sub">Test your knowledge on moles, stoichiometry, isotopes, atomic structure, and more.</p>
     <div class="info-chips">
-      <div class="chip">🧪 <b>60</b> Questions</div>
-      <div class="chip">⏱ <b>30</b> Minutes</div>
+      <div class="chip">🧪 <b>64</b> Questions</div>
+      <div class="chip">⏱ <b>64</b> Minutes</div>
       <div class="chip">🎯 One at a time</div>
       <div class="chip">✅ Auto-checked</div>
     </div>
@@ -514,7 +514,7 @@
       <div class="result-sub-text" id="result-sub"></div>
       <div class="score-circle">
         <div class="score-num" id="score-num">0</div>
-        <div class="score-denom">out of 60</div>
+        <div class="score-denom">out of 64</div>
       </div>
       <div class="stats-grid">
         <div class="stat c"><div class="val" id="r-correct">0</div><div class="lbl">Correct</div></div>
@@ -533,7 +533,7 @@
   <div class="timeout-box">
     <div style="font-size:2.5rem">⏰</div>
     <h2>Time's Up!</h2>
-    <p>Your 30-minute quiz has ended and answers have been auto-submitted.</p>
+    <p>Your 64-minute quiz has ended and answers have been auto-submitted.</p>
     <button class="timeout-ok" onclick="dismissTimeout()">View Results</button>
   </div>
 </div>
@@ -606,7 +606,7 @@ const questions = [
   { q: "If number of molecules of different gases are same at S.T.P, the occupied volume will be:", opts: ["greater","same","smaller","twice"], ans: "B" }
 ];
 
-const TOTAL_TIME = 30 * 60;
+const TOTAL_TIME = 64 * 64;
 let currentQ = 0;
 let userAnswers = new Array(questions.length).fill(null);
 let checked = new Array(questions.length).fill(false);
@@ -843,7 +843,7 @@ function retryQuiz() {
   timeLeft = TOTAL_TIME;
   quizDone = false;
   clearInterval(timerInterval);
-  document.getElementById('timer-display').textContent = '30:00';
+  document.getElementById('timer-display').textContent = '64:00';
   document.getElementById('timer-display').className = '';
   document.getElementById('result-screen').style.display = 'none';
   document.getElementById('quiz-screen').style.display = 'block';
