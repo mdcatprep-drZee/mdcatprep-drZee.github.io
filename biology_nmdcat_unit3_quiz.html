@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biology NMDCAT – Unit 3 | Bioenergetics</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
+
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1c2230;
+    --border: #2a3344;
+    --accent: #00d4aa;
+    --accent2: #ff6b6b;
+    --accent3: #ffd166;
+    --text: #e6edf3;
+    --text-muted: #7d8fa3;
+    --correct: #2ea043;
+    --correct-bg: #0d2818;
+    --wrong: #da3633;
+    --wrong-bg: #2d0f0f;
+    --unanswered: #555;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 18px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    gap: 12px;
+  }
+
+  .header-left h1 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .header-left p {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 2px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  /* ── Timer ── */
+  #timer-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 14px;
+  }
+  #timer-display {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--accent);
+    min-width: 72px;
+    letter-spacing: 0.05em;
+    transition: color 0.3s;
+  }
+  #timer-display.warning { color: var(--accent3); }
+  #timer-display.danger  { color: var(--accent2); animation: pulse 0.8s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+
+  .timer-controls { display: flex; gap: 6px; }
+  .btn-sm {
+    background: var(--border);
+    border: none;
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-sm:hover { background: #3a4558; }
+
+  /* ── Progress bar ── */
+  .progress-wrap {
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .progress-bar-outer {
+    flex: 1;
+    height: 5px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-bar-inner {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 3px;
+    transition: width 0.3s;
+    width: 0%;
+  }
+  .progress-text {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+
+  /* ── Main layout ── */
+  main {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 28px 20px 80px;
+  }
+
+  /* ── Question card ── */
+  .question-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 18px;
+    overflow: hidden;
+    transition: border-color 0.25s;
+  }
+  .question-card.answered-correct { border-color: var(--correct); }
+  .question-card.answered-wrong   { border-color: var(--accent2); }
+
+  .q-header {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding: 14px 18px 0;
+  }
+  .q-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    background: rgba(0,212,170,0.1);
+    border: 1px solid rgba(0,212,170,0.25);
+    padding: 2px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .q-text {
+    font-size: 14.5px;
+    font-weight: 500;
+    color: var(--text);
+    padding: 14px 18px 10px;
+  }
+
+  /* ── Options ── */
+  .options { padding: 0 14px 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .options.single-col { grid-template-columns: 1fr; }
+
+  .option-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 13.5px;
+    padding: 10px 13px;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.15s, border-color 0.15s;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 1.4;
+  }
+  .option-btn:hover:not(:disabled) {
+    background: #222d3d;
+    border-color: var(--accent);
+  }
+  .option-btn .opt-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .option-btn:disabled { cursor: default; }
+
+  .option-btn.selected { border-color: #3a6efd; background: #162040; }
+  .option-btn.correct  { background: var(--correct-bg) !important; border-color: var(--correct) !important; color: #56d364; }
+  .option-btn.wrong    { background: var(--wrong-bg)   !important; border-color: var(--accent2)  !important; color: var(--accent2); }
+
+  /* ── Feedback strip ── */
+  .feedback {
+    display: none;
+    padding: 9px 18px;
+    font-size: 12.5px;
+    font-weight: 500;
+    border-top: 1px solid var(--border);
+    align-items: center;
+    gap: 7px;
+  }
+  .feedback.show { display: flex; }
+  .feedback.correct-fb { background: var(--correct-bg); color: #56d364; border-top-color: var(--correct); }
+  .feedback.wrong-fb   { background: var(--wrong-bg);   color: var(--accent2); border-top-color: var(--accent2); }
+
+  /* ── Submit / Result ── */
+  .action-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 14px 24px;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    z-index: 99;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #000;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 11px 28px;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    transition: opacity 0.2s, transform 0.15s;
+  }
+  .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--text-muted);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    padding: 11px 20px;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-secondary:hover { border-color: var(--text-muted); color: var(--text); }
+
+  /* ── Result panel ── */
+  #result-panel {
+    display: none;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 28px;
+    text-align: center;
+  }
+  #result-panel.show { display: block; }
+
+  .score-ring {
+    width: 110px;
+    height: 110px;
+    margin: 0 auto 16px;
+    position: relative;
+  }
+  .score-ring svg { transform: rotate(-90deg); }
+  .score-ring circle { fill: none; stroke-width: 8; }
+  .score-ring .bg-c  { stroke: var(--border); }
+  .score-ring .fg-c  { stroke: var(--accent); stroke-linecap: round; transition: stroke-dashoffset 1s ease; }
+  .score-center {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  .result-stats {
+    display: flex;
+    justify-content: center;
+    gap: 28px;
+    margin: 18px 0;
+    flex-wrap: wrap;
+  }
+  .stat { text-align: center; }
+  .stat .val {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 22px;
+    font-weight: 600;
+  }
+  .stat .lbl { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+  .stat.c .val { color: var(--correct); }
+  .stat.w .val { color: var(--accent2); }
+  .stat.s .val { color: var(--accent3); }
+
+  .result-title {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .result-sub { font-size: 13px; color: var(--text-muted); }
+
+  /* ── Time up overlay ── */
+  #timeup-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 16px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  #timeup-overlay.show { display: flex; }
+  #timeup-overlay h2 { font-size: 28px; color: var(--accent2); }
+  #timeup-overlay p  { color: var(--text-muted); font-size: 14px; }
+
+  /* Arrow markers for feedback */
+  .icon-check::before { content: '✓ '; }
+  .icon-x::before     { content: '✗ '; }
+
+  @media (max-width: 520px) {
+    .options { grid-template-columns: 1fr; }
+    header { flex-wrap: wrap; }
+    #timer-display { font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── Time Up Overlay ── -->
+<div id="timeup-overlay">
+  <h2>⏰ Time's Up!</h2>
+  <p>Your time has expired. Submitting quiz…</p>
+</div>
+
+<!-- ── Header ── -->
+<header>
+  <div class="header-left">
+    <h1>NMDCAT · Unit 3</h1>
+    <p>Bioenergetics &amp; Respiration — 45 Questions</p>
+  </div>
+  <div id="timer-box">
+    <div>
+      <div id="timer-display">45:00</div>
+      <div style="font-size:10px;color:var(--text-muted);font-family:'IBM Plex Mono',monospace;">remaining</div>
+    </div>
+    <div class="timer-controls">
+      <button class="btn-sm" id="btn-pause">⏸</button>
+      <button class="btn-sm" id="btn-reset">↺</button>
+    </div>
+  </div>
+</header>
+
+<!-- ── Progress ── -->
+<div class="progress-wrap">
+  <div class="progress-bar-outer"><div class="progress-bar-inner" id="progress-bar"></div></div>
+  <div class="progress-text" id="progress-text">0 / 45 answered</div>
+</div>
+
+<!-- ── Main ── -->
+<main id="quiz-main">
+  <!-- Result panel (hidden initially) -->
+  <div id="result-panel">
+    <div class="score-ring">
+      <svg viewBox="0 0 100 100" width="110" height="110">
+        <circle class="bg-c" cx="50" cy="50" r="42"/>
+        <circle class="fg-c" id="score-arc" cx="50" cy="50" r="42"
+          stroke-dasharray="263.9" stroke-dashoffset="263.9"/>
+      </svg>
+      <div class="score-center" id="score-pct">0%</div>
+    </div>
+    <div class="result-title" id="result-title">Quiz Complete</div>
+    <div class="result-sub" id="result-sub"></div>
+    <div class="result-stats">
+      <div class="stat c"><div class="val" id="r-correct">0</div><div class="lbl">Correct</div></div>
+      <div class="stat w"><div class="val" id="r-wrong">0</div><div class="lbl">Wrong</div></div>
+      <div class="stat s"><div class="val" id="r-skip">0</div><div class="lbl">Skipped</div></div>
+      <div class="stat"><div class="val" id="r-time" style="color:var(--accent)">–</div><div class="lbl">Time used</div></div>
+    </div>
+  </div>
+
+  <!-- Questions injected here -->
+  <div id="questions-container"></div>
+</main>
+
+<!-- ── Action bar ── -->
+<div class="action-bar">
+  <button class="btn-secondary" id="btn-clear">Clear answers</button>
+  <button class="btn-primary"   id="btn-submit">Submit Quiz</button>
+</div>
+
+<script>
+// ─────────────────────────────────────────────
+// QUESTION DATA  (correct answer = 0-indexed)
+// ─────────────────────────────────────────────
+const questions = [
+  { q: "It is the quantitative study of energy relationship and energy conversions in biological systems:", opts: ["Thermodynamics","Biochemistry","Thermo-chemistry","Bioenergetics"], ans: 3 },
+  { q: "Actual source of oxygen produced during photosynthesis is:", opts: ["Carbon dioxide","Water","Glucose","G3P"], ans: 1 },
+  { q: "The incorrect statement for photosynthesis is:", opts: ["It occurs during day time","It uses water","It requires chlorophyll","It uses Oxygen"], ans: 3 },
+  { q: "All of the following are characteristics of head of chlorophyll except:", opts: ["Flat and square","Light absorbing","Contains magnesium","Hydrophobic"], ans: 3 },
+  { q: "A graph plotted showing absorption of different wavelengths of light by a pigment is called:", opts: ["Photosynthetic spectrum","Absorption spectrum","Pigment spectrum","Action spectrum"], ans: 1 },
+  { q: "All of the following functions are performed by carotenoids except:", opts: ["Broaden the absorption spectrum","Protection of human eyes","Protection of chlorophyll molecules","Formation of ATP and NADPH"], ans: 3 },
+  { q: "The main difference between PS-I and PS-II lies in their:", opts: ["Antenna complex","Chlorophyll 'a'","Reaction center","Chlorophyll 'b'"], ans: 2 },
+  { q: "It is not an accessory pigment of photosynthesis:", opts: ["Carotenes","Chlorophyll 'b'","Chlorophyll 'a'","Xanthophylls"], ans: 2 },
+  { q: "__________ is a kind of chemical linkage between catabolism and anabolism.", opts: ["NADH","G3P","FADH₂","ATP"], ans: 3 },
+  { q: "In light independent stage of photosynthesis, CO₂ combines with its acceptor molecule, called ____________ and form an unstable 6-carbon intermediate.", opts: ["Ribulose 1,5-bisphosphate","NADPH","Hexose sugar","Glyceraldehyde 3-phosphate"], ans: 0 },
+  { q: "All of the following contain a five carbon sugar except:", opts: ["RuBP","FADH","NAD⁺","Rubisco"], ans: 1 },
+  { q: "The part of chlorophyll molecule which absorbs light is:", opts: ["Phytol","Long hydrocarbon chain","Porphyrin ring","Hydrophobic tail"], ans: 2 },
+  { q: "All of the following are produced during light reactions of photosynthesis except:", opts: ["ATP","Glucose","O₂","NADPH"], ans: 1 },
+  { q: "Photosystem II is concerned with:", opts: ["Photolysis of water","Formation of G3P","Reduction of CO₂","Reduction of NADP⁺"], ans: 0 },
+  { q: "The product of cyclic electron flow is:", opts: ["O₂","NADPH","ATP","FADH₂"], ans: 2 },
+  { q: "The correct sequence of flow of electrons during light reaction of photosynthesis:", opts: ["Cytochrome complex → Plastoquinone → Plastocyanin","Plastoquinone → Cytochrome complex → Plastocyanin","Cytochrome complex → Plastocyanin → Plastoquinone","Plastoquinone → Plastocyanin → Cytochrome complex"], ans: 1, wide: true },
+  { q: "It acts as reducing agent during dark reactions of photosynthesis:", opts: ["ATP","H₂O","NADPH","G3P"], ans: 2 },
+  { q: "In the chloroplast diagram, labels 1–4 represent (CO₂ enters light-dep., O₂ exits light-dep., sugars exit light-indep., H₂O enters light-dep.):", opts: ["CO₂, ATP, H₂O, Starch","CO₂, H₂O, Sugars, O₂","H₂O, O₂, CO₂, Sugars","Sugars, H₂O, ATP, O₂"], ans: 1 },
+  { q: "__________ is the site of light independent reaction.", opts: ["Thylakoid space","Grana","Thylakoid membrane","Stroma"], ans: 3 },
+  { q: "Type of respiration which involves step by step breakdown of carbon chain molecules in the cell is called:", opts: ["External respiration","Pulmonary respiration","Cellular respiration","Organismic respiration"], ans: 2 },
+  { q: "The most common respiratory substrate used as a source of energy by the cells is:", opts: ["Glucose","Fructose","Sucrose","Insulin"], ans: 0 },
+  { q: "What is the net production of ATP molecules during anaerobic respiration?", opts: ["0","4","2","8"], ans: 2 },
+  { q: "What is the equation for aerobic respiration?", opts: ["Carbon dioxide + Water → Glucose + Oxygen + Energy","Oxygen + Glucose → Carbon dioxide + Alcohol + Energy","Carbon dioxide + Water → Alcohol + Oxygen + Energy","Glucose + Oxygen → Water + Carbon dioxide + Energy"], ans: 3, wide: true },
+  { q: "Which stage of cellular respiration will not be affected by absence or presence of oxygen?", opts: ["Glycolysis","Krebs cycle","Link reaction","Oxidative phosphorylation"], ans: 0 },
+  { q: "It is true about preparatory phase of glycolysis:", opts: ["ATP are consumed","NADH are consumed","ATP are produced","NAD⁺ are produced"], ans: 0 },
+  { q: "It splits into trioses during glycolysis:", opts: ["Fructose 4, 6-bisphosphate","Fructose 1, 3-bisphosphate","Glucose 6-phosphate","Fructose 1, 6-bisphosphate"], ans: 3 },
+  { q: "Which of the following is not related to the pyruvic acid oxidation?", opts: ["Decarboxylation","Addition of Co-A","Oxidation of NAD⁺","Oxidation of pyruvate"], ans: 2 },
+  { q: "During glycolysis, a water molecule is released when:", opts: ["BPG is converted into 3PG","2PG is converted into PEP","3PG is converted into 2PG","PEP is formed pyruvate"], ans: 1 },
+  { q: "In which step of Krebs cycle, decarboxylation does occur?", opts: ["Citrate to isocitrate formation","α-ketoglutarate to isocitrate formation","Fumarate to malate formation","Isocitrate to α-ketoglutarate formation"], ans: 3 },
+  { q: "During Krebs cycle, conversion of succinate into fumarate give rise to:", opts: ["NADH","FADH₂","NADPH","ATP"], ans: 1 },
+  { q: "Net production of ATP molecules in a prokaryotic cell when a glucose molecule is completely oxidized is:", opts: ["34 ATP","38 ATP","36 ATP","40 ATP"], ans: 1 },
+  { q: "The chemical formula of lactic acid is:", opts: ["C₃H₄O₃","C₂H₅OH","C₃H₆O₃","C₄H₈O₄"], ans: 2 },
+  { q: "During chemiosmosis, ATPs are formed when H⁺ move:", opts: ["Actively from cytoplasmic matrix to inter membranous space","Actively from inter membranous space to cytoplasmic matrix","Passively from inter membranous space to mitochondrial matrix","Passively from mitochondrial matrix to inter membranous space"], ans: 2, wide: true },
+  { q: "The water splitting step of photosynthesis is referred as:", opts: ["Phosphorylation","Plasmolysis","Photorespiration","Photolysis"], ans: 3 },
+  { q: "Carriers of the respiratory chain are located on:", opts: ["Matrix of mitochondria","Inner membrane of mitochondria","Outer membrane of mitochondria","Cytoplasmic matrix"], ans: 1 },
+  { q: "The source of oxygen during photosynthesis is:", opts: ["CO₂","G3P","H₂O","H₂S"], ans: 2 },
+  { q: "All are products of light reactions except:", opts: ["ATP","C₆H₁₂O₆","O₂","NADPH"], ans: 1 },
+  { q: "Diversity among photosystems is due to:", opts: ["Carotenes","Chlorophyll 'b'","Chlorophyll 'a'","Xanthophylls"], ans: 0 },
+  { q: "Ultimate source of energy for the formation of glucose through Calvin cycle is:", opts: ["NADH","NADPH₂","ATP","Solar energy"], ans: 3 },
+  { q: "All of the following are involved in cyclic electron flow during light reaction except:", opts: ["Plastocyanin","Primary electron acceptor","Plastoquinone","Ferredoxin"], ans: 1 },
+  { q: "How many ATPs are required for the operation of one Calvin cycle?", opts: ["3","6","9","18"], ans: 2 },
+  { q: "Basic structure of all chlorophylls comprises:", opts: ["Cytochromes","Porphyrins","Flavoproteins","Plastocyanins"], ans: 1 },
+  { q: "At the end of the respiratory chain, electrons, protons and oxygen combine to form:", opts: ["ATP","Water","CO₂","Pyruvate"], ans: 1 },
+  { q: "The fixation of CO₂ in Calvin cycle requires which of the following acceptor molecule?", opts: ["Aldo-pentose","Keto-pentose","Aldo-triose","Keto-triose"], ans: 1 },
+  { q: "Which is the correct order of energy transfer from accessory pigments to main photosynthetic pigment?", opts: ["Carotenoids → chlorophyll a → chlorophyll b","Chlorophyll a → carotenoids → chlorophyll b","Carotenoids → chlorophyll b → chlorophyll a","Chlorophyll b → carotenoids → chlorophyll a"], ans: 2, wide: true },
+];
+
+const LABELS = ['A','B','C','D'];
+const TOTAL_SECONDS = 45 * 60;
+let timeLeft = TOTAL_SECONDS;
+let timerInterval = null;
+let paused = false;
+let submitted = false;
+let timeUsed = 0;
+let userAnswers = new Array(questions.length).fill(null);
+
+// ─── Build questions ───
+const container = document.getElementById('questions-container');
+questions.forEach((q, i) => {
+  const card = document.createElement('div');
+  card.className = 'question-card';
+  card.id = `q${i}`;
+
+  const header = document.createElement('div');
+  header.className = 'q-header';
+  header.innerHTML = `<span class="q-num">Q.${i+1}</span>`;
+  card.appendChild(header);
+
+  const qtext = document.createElement('div');
+  qtext.className = 'q-text';
+  qtext.textContent = q.q;
+  card.appendChild(qtext);
+
+  const opts = document.createElement('div');
+  opts.className = 'options' + (q.wide ? ' single-col' : '');
+  q.opts.forEach((opt, oi) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.id = `q${i}_o${oi}`;
+    btn.innerHTML = `<span class="opt-label">${LABELS[oi]}.</span><span>${opt}</span>`;
+    btn.addEventListener('click', () => selectAnswer(i, oi));
+    opts.appendChild(btn);
+  });
+  card.appendChild(opts);
+
+  const fb = document.createElement('div');
+  fb.className = 'feedback';
+  fb.id = `fb${i}`;
+  card.appendChild(fb);
+
+  container.appendChild(card);
+});
+
+// ─── Select answer ───
+function selectAnswer(qi, oi) {
+  if (submitted) return;
+  // deselect previous
+  const prev = userAnswers[qi];
+  if (prev !== null) {
+    document.getElementById(`q${qi}_o${prev}`).classList.remove('selected');
+  }
+  userAnswers[qi] = oi;
+  document.getElementById(`q${qi}_o${oi}`).classList.add('selected');
+  updateProgress();
+}
+
+// ─── Progress ───
+function updateProgress() {
+  const answered = userAnswers.filter(a => a !== null).length;
+  const pct = (answered / questions.length) * 100;
+  document.getElementById('progress-bar').style.width = pct + '%';
+  document.getElementById('progress-text').textContent = `${answered} / ${questions.length} answered`;
+}
+
+// ─── Timer ───
+function formatTime(s) {
+  const m = Math.floor(s / 60);
+  const sec = s % 60;
+  return `${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
+}
+
+function updateTimerDisplay() {
+  const el = document.getElementById('timer-display');
+  el.textContent = formatTime(timeLeft);
+  el.className = '';
+  if (timeLeft <= 60) el.classList.add('danger');
+  else if (timeLeft <= 180) el.classList.add('warning');
+}
+
+function startTimer() {
+  timerInterval = setInterval(() => {
+    if (paused || submitted) return;
+    timeLeft--;
+    timeUsed++;
+    updateTimerDisplay();
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      document.getElementById('timeup-overlay').classList.add('show');
+      setTimeout(() => {
+        document.getElementById('timeup-overlay').classList.remove('show');
+        submitQuiz();
+      }, 2200);
+    }
+  }, 1000);
+}
+
+document.getElementById('btn-pause').addEventListener('click', () => {
+  paused = !paused;
+  document.getElementById('btn-pause').textContent = paused ? '▶' : '⏸';
+});
+
+document.getElementById('btn-reset').addEventListener('click', () => {
+  if (submitted) return;
+  if (!confirm('Reset timer to 45:00?')) return;
+  timeLeft = TOTAL_SECONDS;
+  timeUsed = 0;
+  paused = false;
+  document.getElementById('btn-pause').textContent = '⏸';
+  updateTimerDisplay();
+});
+
+// ─── Submit ───
+function submitQuiz() {
+  if (submitted) return;
+  submitted = true;
+  clearInterval(timerInterval);
+
+  let correct = 0, wrong = 0, skipped = 0;
+
+  questions.forEach((q, i) => {
+    const card = document.getElementById(`q${i}`);
+    const fb = document.getElementById(`fb${i}`);
+    const chosen = userAnswers[i];
+
+    // disable all buttons
+    q.opts.forEach((_, oi) => {
+      const btn = document.getElementById(`q${i}_o${oi}`);
+      btn.disabled = true;
+      btn.classList.remove('selected');
+    });
+
+    if (chosen === null) {
+      skipped++;
+      card.style.opacity = '0.65';
+      fb.className = 'feedback show wrong-fb';
+      fb.innerHTML = `<span class="icon-x"></span>Skipped — correct answer: <strong>${LABELS[q.ans]}. ${q.opts[q.ans]}</strong>`;
+      document.getElementById(`q${i}_o${q.ans}`).classList.add('correct');
+    } else if (chosen === q.ans) {
+      correct++;
+      card.classList.add('answered-correct');
+      document.getElementById(`q${i}_o${chosen}`).classList.add('correct');
+      fb.className = 'feedback show correct-fb';
+      fb.innerHTML = `<span class="icon-check"></span>Correct!`;
+    } else {
+      wrong++;
+      card.classList.add('answered-wrong');
+      document.getElementById(`q${i}_o${chosen}`).classList.add('wrong');
+      document.getElementById(`q${i}_o${q.ans}`).classList.add('correct');
+      fb.className = 'feedback show wrong-fb';
+      fb.innerHTML = `<span class="icon-x"></span>Wrong — correct answer: <strong>${LABELS[q.ans]}. ${q.opts[q.ans]}</strong>`;
+    }
+  });
+
+  // Show result panel
+  const pct = Math.round((correct / questions.length) * 100);
+  const resultPanel = document.getElementById('result-panel');
+  resultPanel.classList.add('show');
+
+  document.getElementById('score-pct').textContent = pct + '%';
+  document.getElementById('r-correct').textContent = correct;
+  document.getElementById('r-wrong').textContent = wrong;
+  document.getElementById('r-skip').textContent = skipped;
+  document.getElementById('r-time').textContent = formatTime(timeUsed);
+
+  // Animate ring
+  const circ = 263.9;
+  const offset = circ - (pct / 100) * circ;
+  setTimeout(() => {
+    document.getElementById('score-arc').style.strokeDashoffset = offset;
+  }, 100);
+
+  let title = '';
+  if (pct >= 80) title = '🏆 Excellent Performance!';
+  else if (pct >= 60) title = '👍 Good Effort!';
+  else if (pct >= 40) title = '📘 Keep Studying!';
+  else title = '💪 More Practice Needed';
+
+  document.getElementById('result-title').textContent = title;
+  document.getElementById('result-sub').textContent = `You scored ${correct} out of ${questions.length} in ${formatTime(timeUsed)}.`;
+
+  // Scroll to top
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Change submit button
+  document.getElementById('btn-submit').textContent = 'Retake Quiz';
+  document.getElementById('btn-submit').onclick = () => location.reload();
+  document.getElementById('btn-clear').style.display = 'none';
+}
+
+document.getElementById('btn-submit').addEventListener('click', () => {
+  const answered = userAnswers.filter(a => a !== null).length;
+  const remaining = questions.length - answered;
+  if (remaining > 0) {
+    if (!confirm(`You have ${remaining} unanswered question(s). Submit anyway?`)) return;
+  }
+  submitQuiz();
+});
+
+document.getElementById('btn-clear').addEventListener('click', () => {
+  if (submitted) return;
+  if (!confirm('Clear all your answers?')) return;
+  userAnswers = new Array(questions.length).fill(null);
+  questions.forEach((_, i) => {
+    LABELS.forEach((_, oi) => {
+      document.getElementById(`q${i}_o${oi}`).classList.remove('selected');
+    });
+  });
+  updateProgress();
+});
+
+// ─── Init ───
+updateTimerDisplay();
+updateProgress();
+startTimer();
+</script>
+</body>
+</html>
