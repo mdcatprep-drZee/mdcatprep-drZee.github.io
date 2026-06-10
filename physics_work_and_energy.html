@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physics NMDCAT Quiz - Unit 2</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #34495e;
+            --accent: #e67e22;
+            --success: #27ae60;
+            --danger: #e74c3c;
+            --light: #ecf0f1;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 15px;
+        }
+        .container {
+            background: #fff;
+            width: 100%;
+            max-width: 650px;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--light);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+        #timer {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--danger);
+            background: #fdeaea;
+            padding: 5px 15px;
+            border-radius: 6px;
+        }
+        .progress {
+            font-weight: 600;
+            color: var(--secondary);
+        }
+        .question-text {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--primary);
+            line-height: 1.5;
+            margin-bottom: 25px;
+        }
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+        .option {
+            padding: 14px 18px;
+            border: 2px solid var(--light);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 1rem;
+            color: var(--secondary);
+        }
+        .option:hover {
+            border-color: var(--accent);
+            background: #fff8f2;
+        }
+        .option.correct {
+            background-color: #d4edda !important;
+            border-color: var(--success) !important;
+            color: #155724;
+            pointer-events: none;
+        }
+        .option.wrong {
+            background-color: #f8d7da !important;
+            border-color: var(--danger) !important;
+            color: #721c24;
+            pointer-events: none;
+        }
+        .option.disabled {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+        .controls {
+            margin-top: 30px;
+            display: flex;
+            justify-content: flex-end;
+        }
+        #next-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        #next-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        #result-view {
+            text-align: center;
+            display: none;
+        }
+        .score-display {
+            font-size: 3.5rem;
+            color: var(--accent);
+            margin: 20px 0;
+            font-weight: 800;
+        }
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+<div class="container" id="quiz-view">
+    <div class="header">
+        <div class="progress" id="progress-text">Question 1 / 50</div>
+        <div id="timer">--:--</div>
+    </div>
+    
+    <div id="question-area">
+        <div class="question-text" id="q-text">Loading...</div>
+        <div class="options-grid" id="options-box"></div>
+    </div>
+
+    <div class="controls">
+        <button id="next-btn" onclick="nextAction()" disabled>Next Question</button>
+    </div>
+</div>
+
+<div class="container" id="result-view">
+    <h2>Practice Set Completed</h2>
+    <div class="score-display" id="final-score">0 / 50</div>
+    <p id="stats"></p>
+    <button id="next-btn" style="margin-top:20px" onclick="location.reload()">Restart Quiz</button>
+</div>
+
+<script>
+    const questions = [
+        {"q": "Q.1 A ball is dropped from a height of 10 m.", "options": ["Its potential energy increases and kinetic energy decreases during the fall", "Its potential energy is equal to the kinetic energy during the fall", "The potential energy decreases and the kinetic energy increases during the fall", "The potential energy and kinetic energy is maximum while it is falling"], "correct": 2},
+        {"q": "Q.2 What is the formula of work done?", "options": ["Work done = force × displacement", "Work done = pressure × displacement", "Work done = force × velocity", "Work done = mass × acceleration"], "correct": 0},
+        {"q": "Q.3 Speed is halved and mass is quadrupled, kinetic energy is:", "options": ["Quartered", "Twice", "One Third", "Remain same"], "correct": 3},
+        {"q": "Q.4 For a body moving in a circular path, the work done by centripetal force is:", "options": ["Negative", "Positive", "Constant", "Zero"], "correct": 3},
+        {"q": "Q.5 d=10m, F=5N, W=25J, angle theta is:", "options": ["0°", "30°", "60°", "90°"], "correct": 2},
+        {"q": "Q.6 In explosion, body breaks into two unequal masses. In this:", "options": ["Both parts have numerically equal momentum", "Lighter part has more momentum", "Heavier part has more momentum", "Both parts have equal kinetic energy"], "correct": 0},
+        {"q": "Q.7 Circular motion, constant speed v, angular velocity is:", "options": ["v^2/r", "vr", "v/r", "r/v"], "correct": 2},
+        {"q": "Q.8 Motor cyclist in circular track at constant speed has:", "options": ["Constant linear velocity", "Constant angular velocity", "Constant acceleration", "Constant force"], "correct": 1},
+        {"q": "Q.9 Ratio of angular speeds of minute hand and hour hand of watch:", "options": ["1 : 12", "6 : 1", "12 : 1", "1 : 6"], "correct": 2},
+        {"q": "Q.10 Body moving along circular path with variable speed has:", "options": ["Radial acceleration", "Zero acceleration", "Tangential acceleration", "Both tangential and radial accelerations"], "correct": 3},
+        {"q": "Q.11 Force varies with distance. Work done moving from x=0 to x=6m? (Rectangle 0-3 F=3, Triangle 3-6 F=3 to 0)", "options": ["18.0 J", "13.5 J", "4.5 J", "9.0 J"], "correct": 1},
+        {"q": "Q.12 If net work done is positive, kinetic energy:", "options": ["Increases", "Remains same", "Decreases", "Is zero"], "correct": 0},
+        {"q": "Q.13 In presence of air friction, relation for free falling body is:", "options": ["mgh = 1/2mv^2 - fh", "mgh = 1/2mv^2 + fh", "mgh = fh - 1/2mv^2", "mgh = fg + 1/2mv^2"], "correct": 1},
+        {"q": "Q.14 From F-x graph (0-1: 10N, 1-2: 0N, 2-3: -10N, 3-4: 10N), total work done is:", "options": ["0 J", "10 J", "20 J", "30 J"], "correct": 1},
+        {"q": "Q.15 Mathematical form of work energy principle is:", "options": ["Fd = 1/2mv_i^2 - 1/2mv_f^2", "Fd = 1/2mv_f^2 - 1/2mv_i^2", "Fd = 1/2mv_f - 1/2mv_i", "Fd = 1/2mv_f^2 + 1/2mv_i^2"], "correct": 1},
+        {"q": "Q.16 If momentum is increased by two times K.E increases by:", "options": ["Two times", "3 times", "Four times", "Remains"], "correct": 2},
+        {"q": "Q.17 Particle moves with V=3j+5i+6k under F=10i+10j+20k N. Power is:", "options": ["200 Js^-1", "170 Js^-1", "40 Js^-1", "140 Js^-1"], "correct": 3},
+        {"q": "Q.18 Largest kinetic energy body from options below?", "options": ["Mass 3M, speed v", "Mass 3M, speed 2v", "Mass 2M, speed 3v", "Mass M, speed 4v"], "correct": 2},
+        {"q": "Q.19 One megawatt hour is equal to (According to Key):", "options": ["3.6 * 10^6 J", "3.6 * 10^12 J", "3.6 * 10^8 J", "3.6 * 10^9 J"], "correct": 0},
+        {"q": "Q.20 Example of work done against force:", "options": ["Getting up with stairs", "Walking on flat ground", "Getting down with stairs", "Dropping object"], "correct": 0},
+        {"q": "Q.21 Work is independent of:", "options": ["Force", "Time", "Displacement", "All of these"], "correct": 1},
+        {"q": "Q.22 Pump lifts 200kg water, height 6m, in 10s. Power?", "options": ["1100 W", "1300 W", "1000 W", "1200 W"], "correct": 3},
+        {"q": "Q.23 Speed and mass doubled, K.E becomes:", "options": ["4 times", "Double", "8 times", "Unchanged"], "correct": 2},
+        {"q": "Q.24 Body at rest may have:", "options": ["Energy", "Momentum", "Speed", "Velocity"], "correct": 0},
+        {"q": "Q.25 Work done is negative if theta is:", "options": ["0", "pi/3", "pi/6", "pi"], "correct": 3},
+        {"q": "Q.26 Solar panel delivers 100W for one minute. Energy delivered:", "options": ["60 J", "6 kJ", "100 J", "3.6 kJ"], "correct": 1},
+        {"q": "Q.27 1kg and 2kg bodies, equal momentum, ratio of KE:", "options": ["1:1", "2:1", "1:2", "3:1"], "correct": 1},
+        {"q": "Q.28 Power 1kW maintained for 1s, work is:", "options": ["10^5 J", "10^-6 J", "10^3 J", "3.6 MJ"], "correct": 2},
+        {"q": "Q.29 P.E at 50m is 100J. At what height is it 200J?", "options": ["20m", "17.5m", "15m", "100m"], "correct": 3},
+        {"q": "Q.30 Which one of the following is watt?", "options": ["Kg ms^-2", "Nms^-2", "Kgms^-3", "Nm s^-1"], "correct": 3},
+        {"q": "Q.31 Mechanical wrist watch has:", "options": ["No energy stored", "Electrical energy", "Heat energy", "Elastic P.E."], "correct": 3},
+        {"q": "Q.32 Work done by gravity when P.E is increased:", "options": ["Positive", "Negative", "Zero", "Both"], "correct": 1},
+        {"q": "Q.33 Body thrown vertically upward, correct statement:", "options": ["P.E increases uniformly", "Total energy constant", "K.E decreases uniformly", "All correct"], "correct": 3},
+        {"q": "Q.34 Raising 10kg block 6.0m using 1000J. Efficiency?", "options": ["50%", "80%", "70%", "60%"], "correct": 3},
+        {"q": "Q.35 Mass 5kg up ramp, F=100 to 0 @ x=10. Max height? (According to Key)", "options": ["20m", "15m", "10m", "5m"], "correct": 3},
+        {"q": "Q.36 Ball rolls down hill (100m climb 30m down 20m). Velocity?", "options": ["40 ms^-1", "20 ms^-1", "10 ms^-1", "10*sqrt(3) ms^-1"], "correct": 0},
+        {"q": "Q.37 Arrow released from bow, energy shift:", "options": ["Heat to K.E", "Chemical to Elastic", "Elastic P.E to K.E", "K.E to Elastic"], "correct": 2},
+        {"q": "Q.38 75kW engine, 700kg airplane, speed 2.5ms^-1. Fraction power used:", "options": ["1/100", "2/30", "3/10", "7/10"], "correct": 3},
+        {"q": "Q.39 6N force on 2kg mass for 4s. K.E in joules?", "options": ["12", "72", "144", "48"], "correct": 2},
+        {"q": "Q.40 Increase in height from surface, P.E:", "options": ["Increases", "Remains same", "Decreased", "All"], "correct": 0},
+        {"q": "Q.41 Work done from smallest to largest list:", "options": ["ii, iii, i", "i, ii, iii", "iii, ii, i", "i, iii, ii"], "correct": 0},
+        {"q": "Q.42 Energy from burning 1-ton coal (approx):", "options": ["5 * 10^7 J", "1 * 10^6 J", "30 * 10^9 J", "1.8 * 10^-11 J"], "correct": 2},
+        {"q": "Q.43 Minimum time to accelerate mass M to speed v with power P:", "options": ["Mv/P", "P/Mv", "Mv^2/2P", "P/Mv^2"], "correct": 2},
+        {"q": "Q.44 Force under which energy is NOT conserved:", "options": ["Frictional", "Electrostatic", "Gravitational", "Elastic"], "correct": 0},
+        {"q": "Q.45 Input 300W, in 20s lifts 400N through 6.0m. Efficiency?", "options": ["12%", "25%", "40%", "75%"], "correct": 2},
+        {"q": "Q.46 F=3i+2j+4k, d=2i-3j+5k. Work done:", "options": ["20 J", "32 J", "26 J", "Zero"], "correct": 0},
+        {"q": "Q.47 Three bricks mass m height h. Work making stack of 3:", "options": ["2 mgh", "3 mgh", "4 mgh", "6 mgh"], "correct": 1},
+        {"q": "Q.48 Work done in F-d graph (Concave up curve, F=25 @ d=2m):", "options": ["100 J", "< 50 J", "= 50 J", "> 50 J"], "correct": 1},
+        {"q": "Q.49 1-ton car twice as fast as 2-ton car. K.E of 1-ton car is:", "options": ["Less", "Same", "More", "Impossible"], "correct": 2},
+        {"q": "Q.50 Agents consumes 1kW power in one hour, work done is:", "options": ["One-watt", "One kilo-watt", "One kilowatt-hour", "Zero"], "correct": 2}
+    ];
+
+    let currentIdx = 0;
+    let score = 0;
+    let timeRemaining = questions.length * 60; // Total seconds = 50 min
+    let timerID;
+
+    function startTimer() {
+        updateTimerDisplay();
+        timerID = setInterval(() => {
+            timeRemaining--;
+            updateTimerDisplay();
+            if (timeRemaining <= 0) {
+                clearInterval(timerID);
+                showResults("Time is up!");
+            }
+        }, 1000);
+    }
+
+    function updateTimerDisplay() {
+        const m = Math.floor(timeRemaining / 60);
+        const s = timeRemaining % 60;
+        document.getElementById('timer').innerText = 
+            `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+    }
+
+    function loadQuestion() {
+        const q = questions[currentIdx];
+        document.getElementById('progress-text').innerText = `Question ${currentIdx + 1} / ${questions.length}`;
+        document.getElementById('q-text').innerText = q.q;
+        
+        const box = document.getElementById('options-box');
+        box.innerHTML = '';
+        
+        q.options.forEach((opt, idx) => {
+            const div = document.createElement('div');
+            div.className = 'option';
+            div.innerText = opt;
+            div.onclick = () => handleSelect(idx, div);
+            box.appendChild(div);
+        });
+        document.getElementById('next-btn').disabled = true;
+    }
+
+    function handleSelect(idx, el) {
+        const correct = questions[currentIdx].correct;
+        const opts = document.querySelectorAll('.option');
+        
+        opts.forEach((o, i) => {
+            o.classList.add('disabled');
+            if (i === correct) o.classList.add('correct');
+        });
+
+        if (idx === correct) {
+            score++;
+        } else {
+            el.classList.add('wrong');
+        }
+        document.getElementById('next-btn').disabled = false;
+    }
+
+    function nextAction() {
+        currentIdx++;
+        if (currentIdx < questions.length) {
+            loadQuestion();
+        } else {
+            showResults("Quiz Complete");
+        }
+    }
+
+    function showResults(title) {
+        clearInterval(timerID);
+        document.getElementById('quiz-view').classList.add('hidden');
+        const res = document.getElementById('result-view');
+        res.style.display = 'block';
+        res.querySelector('h2').innerText = title;
+        document.getElementById('final-score').innerText = `${score} / ${questions.length}`;
+        const timeTaken = questions.length * 60 - timeRemaining;
+        const mm = Math.floor(timeTaken / 60), ss = timeTaken % 60;
+        document.getElementById('stats').innerText = `Time taken: ${mm}m ${ss}s | Accuracy: ${Math.round((score/questions.length)*100)}%`;
+    }
+
+    startTimer();
+    loadQuestion();
+</script>
+
+</body>
+</html>

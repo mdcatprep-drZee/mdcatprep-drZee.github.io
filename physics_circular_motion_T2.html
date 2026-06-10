@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physics MCQ Quiz - Topic 3</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --success: #22c55e;
+            --error: #ef4444;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #1e293b;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .quiz-container {
+            background-color: var(--card);
+            width: 100%;
+            max-width: 600px;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 1rem;
+        }
+
+        #timer {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--error);
+            background: #ffe4e6;
+            padding: 0.4rem 1rem;
+            border-radius: 99px;
+        }
+
+        #progress {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            background-color: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+
+        .option:hover:not(.disabled) {
+            border-color: var(--primary);
+            background-color: #eff6ff;
+        }
+
+        .option.correct {
+            border-color: var(--success) !important;
+            background-color: #f0fdf4 !important;
+            color: #166534;
+        }
+
+        .option.wrong {
+            border-color: var(--error) !important;
+            background-color: #fef2f2 !important;
+            color: #991b1b;
+        }
+
+        .option.disabled {
+            cursor: default;
+        }
+
+        .footer {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        #next-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 2.5rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        #next-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        #result-screen {
+            text-align: center;
+            display: none;
+        }
+
+        .score-box {
+            font-size: 4rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin: 1.5rem 0;
+        }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container" id="quiz-box">
+    <div class="header">
+        <div id="progress">MCQ 1 / 38</div>
+        <div id="timer">--:--</div>
+    </div>
+    
+    <div id="question-content">
+        <div class="question-text" id="q-text">Loading...</div>
+        <div class="options-list" id="opt-container"></div>
+    </div>
+
+    <div class="footer">
+        <button id="next-btn" onclick="goToNext()" disabled>Next</button>
+    </div>
+</div>
+
+<div class="quiz-container" id="result-screen">
+    <h2>Quiz Finished</h2>
+    <p>Your Score</p>
+    <div class="score-box" id="final-score">0 / 38</div>
+    <p id="time-data"></p>
+    <button id="next-btn" style="margin-top: 1rem;" onclick="location.reload()">Reset Quiz</button>
+</div>
+
+<script>
+    const questions = [{"q": "Q.1 The racing cars of masses m\u2081 and m\u2082 are moving in circles of radii r\u2081 and r\u2082 respectively. Their speeds are such that each makes a complete circle in the same length of time. The ratio of the angular speed of the first car to that of the second car is", "options": ["m\u2081 : m\u2082", "r\u2081 : r\u2082", "1 : 1", "m\u2081r\u2081 : m\u2082r\u2082"], "correct": 2}, {"q": "Q.2 The ratio of angular speeds of minute hand and hour hand of a watch is", "options": ["6 : 1", "1 : 12", "12 : 1", "1 : 6"], "correct": 2}, {"q": "Q.3 The angular velocity of a particle rotating in a circular orbit 100 times per minute is", "options": ["1.66 rad/s", "10.47 deg/s", "10.47 rad/s", "60 deg/s"], "correct": 2}, {"q": "Q.4 Angular speed of a particle increases from 2 rads\u207b\u00b9 to 4 rads\u207b\u00b9 across any two diametrically opposite positions. Its angular acceleration will be?", "options": ["6 rads\u207b\u00b2", "6/\u03c0 rads\u207b\u00b2", "\u03c0/6 rads\u207b\u00b2", "\u03c0 rads\u207b\u00b2"], "correct": 1}, {"q": "Q.5 Radian is a unit of angular displacement which can also be measured in degrees. How many radians are equal to one degree?", "options": ["180 / \u03c0", "\u03c0 / 180", "2\u03c0 / 180", "\u03c0 / 57.3"], "correct": 1}, {"q": "Q.6 If a rotating body is moving counter clockwise, direction of angular velocity will be", "options": ["Along linear velocity", "Along the axis of rotation", "Towards the center", "Away from center"], "correct": 1}, {"q": "Q.7 The ratio of angular frequency and linear frequency is", "options": ["2\u03c0", "1 / 2\u03c0", "\u03c0", "\u03c0 / 2"], "correct": 0}, {"q": "Q.8 A flywheel gains a speed of 540 rpm in 6 second. Its angular acceleration is", "options": ["3 \u03c0 rad s\u207b\u00b2", "9 \u03c0 rad s\u207b\u00b2", "6 \u03c0 rad s\u207b\u00b2", "12 \u03c0 rad s\u207b\u00b2"], "correct": 0}, {"q": "Q.9 The angular speed of a fly wheel making 120 revolutions/minute is", "options": ["2\u03c0 rad/s", "4\u03c0\u00b2rad/s", "4\u03c0 rad/s", "\u03c0 rad/s"], "correct": 2}, {"q": "Q.10 For positive angular displacement the rotation would be", "options": ["Clockwise", "Parallel", "Anti-clockwise", "Perpendicular"], "correct": 2}, {"q": "Q.11 Ten seconds after an electric fan is turned on, the fan rotates at 300 rev/min. Its average angular acceleration is", "options": ["30 rad/s\u00b2", "3.14 rad/s\u00b2", "30 rev/s\u00b2", "500 rev/s\u00b2"], "correct": 1}, {"q": "Q.12 The angular speed in radian/hour for daily rotation of the earth is", "options": ["2\u03c0", "\u03c0/6", "4\u03c0", "\u03c0/12"], "correct": 3}, {"q": "Q.13 The shaft of a motor rotates at a constant angular speed of 360 rev/min. Angle turned through in 1 sec in radian is", "options": ["\u03c0", "3\u03c0", "6\u03c0", "12\u03c0"], "correct": 3}, {"q": "Q.14 The angular velocity of the minute hand of a clock is", "options": ["2\u03c0/60 rads\u207b\u00b9", "2\u03c0/3600 rads\u207b\u00b9", "\u03c0/24 rads\u207b\u00b9", "\u03c0/3600 rads\u207b\u00b9"], "correct": 1}, {"q": "Q.15 When a body moves in a circle, the angle between its velocity v and angular velocity \u03c9 is always", "options": ["0\u00b0", "360\u00b0", "180\u00b0", "90\u00b0"], "correct": 3}, {"q": "Q.16 An object is moving along a circular path of radius 4m. What will be its angular displacement if it moves 14m on this circular path?", "options": ["5.5 radians", "3.5 radians", "5.0 radians", "4.5 radians"], "correct": 1}, {"q": "Q.17 Which of the following gives the relationship between linear velocity and angular velocity?", "options": ["v = r\u03c9", "v = r\u03b8", "v = s\u03c9", "v = s\u03b8"], "correct": 0}, {"q": "Q.18 A body moves in a circle with increasing angular velocity. At time t=6 sec, the angular velocity is 27 rad/s. What is the radius of circle where linear velocity is 81 cm/s?", "options": ["6cm", "3cm", "9cm", "7cm"], "correct": 1}, {"q": "Q.19 A wheel of radius 1 m covers an angular displacement of 180\u00b0. Its linear displacement is", "options": ["3.14 m", "\u03c0 rad", "6.28 m", "0.157 m"], "correct": 0}, {"q": "Q.20 Linear velocity of any particle moving in a circular path of radius 2 m with angular velocity 8 rads\u207b\u00b9 will be:", "options": ["16 ms\u207b\u00b9", "4 ms\u207b\u00b9", "10 ms\u207b\u00b9", "6 ms\u207b\u00b9"], "correct": 0}, {"q": "Q.29 When a wheel 1m in diameter makes 30 rev/min, the linear speed of point on it's rim in m s\u207b\u00b9 is", "options": ["2\u03c0", "3\u03c0", "\u03c0 / 2", "4\u03c0"], "correct": 2}, {"q": "Q.30 A body is moving in a circular path with constant speed. The magnitude of tangential and centripetal acceleration are:", "options": ["rv\u00b2, 0", "0, 0", "0, v\u00b2/r", "v\u00b2/r, v\u00b2/r"], "correct": 2}, {"q": "Q.31 Work done due to centripetal force for circular motion will be:", "options": ["reduced", "maximum", "half", "zero"], "correct": 3}, {"q": "Q.32 A 500 kg car takes a round turn of radius 50 m with a velocity of 36 km/hr. The centripetal force is", "options": ["250 N", "750 N", "1000 N", "1200 N"], "correct": 2}, {"q": "Q.33 A cycle wheel of radius 0.4 m completes one revolution in one second then the acceleration of a point on the cycle wheel will be", "options": ["0.8 m/s\u00b2", "0.4 m/s\u00b2", "1.6 \u03c0\u00b2 m/s\u00b2", "0.4 \u03c0\u00b2 m/s\u00b2"], "correct": 2}, {"q": "Q.34 A stone of mass m tied to a string of length l is rotated in a circle. If the string breaks, the stone will move", "options": ["Toward the centre", "Along the tangent", "Away from centre", "All of these"], "correct": 1}, {"q": "Q.35 The mud flies off the tyre of a fast moving car in the direction", "options": ["Parallel to moving tyre", "Tangent to moving tyre", "Anti parallel to moving tyre", "None of these"], "correct": 1}, {"q": "Q.36 Two bodies of mass 10 kg and 5 kg moving in concentric orbits of radii R and r such that their periods are the same. Then the ratio between their centripetal acceleration is", "options": ["R / r", "r / R", "R\u00b2 / r\u00b2", "r\u00b2 / R\u00b2"], "correct": 0}, {"q": "Q.37 The force required to bend the normally straight path of a particle into a circular path is called:", "options": ["Traveling", "Bending", "Centrifugal", "Centripetal"], "correct": 3}, {"q": "Q.38 Which of the following is the correct vector form of centripetal force?", "options": ["m\u03c9r", "mv\u00b2/r (r\u0302)", "m\u03c9\u00b2r (vector)", "\u2013m\u03c9\u00b2r (vector)"], "correct": 3}, {"q": "Q.48 The expression for centripetal force is given by:", "options": ["mr\u03c9\u00b2", "m\u00b2v\u00b2 / r", "m\u00b2v\u00b2 / r\u00b2", "mv\u00b2 / r\u00b2"], "correct": 0}, {"q": "Q.49 The period of circular motion is", "options": ["T = 2\u03c0 / \u03c9", "T = \u03c9 / 2\u03c0", "T = 2\u03c0\u03c9", "T = \u03c0\u03c9 / 2"], "correct": 0}, {"q": "Q.50 A car of mass 1000kg traveling at 40 ms\u207b\u00b9 rounds a curve of radius 100m. what is the Fc?", "options": ["100 N", "1.6 \u00d7 10\u00b3 N", "1.6 \u00d7 10\u2074 N", "8 \u00d7 10\u2074 N"], "correct": 2}, {"q": "Q.51 If the radius of the circular path is half without changing speed of rotation then the Fc becomes", "options": ["Half", "Doubled", "One third", "One forth"], "correct": 1}, {"q": "Q.52 The curved flight of fighter planes at high speed requires a large", "options": ["Gravitational force", "Centripetal force", "Frictional force", "Centrifugal acceleration"], "correct": 1}, {"q": "Q.53 The centripetal force has the same dimension as the", "options": ["Angular acceleration", "Centrifugal force", "Centripetal acceleration", "Centrifugal acceleration"], "correct": 1}, {"q": "Q.54 A 500 kg crane takes a turn of radius 50 m with velocity of 36 km/hr. The centripetal force is", "options": ["1200 N", "1000 N", "750 N", "250 N"], "correct": 1}, {"q": "Q.55 The dimensions of centripetal force is", "options": ["[MLT\u207b\u00b2]", "[MLT\u207b\u00b9]", "[LT\u207b\u00b2]", "[LT\u207b\u00b9]"], "correct": 0}];
+
+    let currentIdx = 0;
+    let score = 0;
+    let timeRemaining = questions.length * 60; 
+    let timerID;
+
+    function init() {
+        startTimer();
+        renderQuestion();
+    }
+
+    function startTimer() {
+        updateTimerDisplay();
+        timerID = setInterval(() => {
+            timeRemaining--;
+            updateTimerDisplay();
+            if (timeRemaining <= 0) {
+                clearInterval(timerID);
+                endQuiz();
+            }
+        }, 1000);
+    }
+
+    function updateTimerDisplay() {
+        const m = Math.floor(timeRemaining / 60);
+        const s = timeRemaining % 60;
+        document.getElementById('timer').innerText = 
+            `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+    }
+
+    function renderQuestion() {
+        const q = questions[currentIdx];
+        document.getElementById('progress').innerText = `MCQ ${currentIdx + 1} / ${questions.length}`;
+        document.getElementById('q-text').innerText = q.q;
+        
+        const container = document.getElementById('opt-container');
+        container.innerHTML = '';
+        
+        q.options.forEach((opt, idx) => {
+            const btn = document.createElement('div');
+            btn.className = 'option';
+            btn.innerText = opt;
+            btn.onclick = () => selectOption(idx, btn);
+            container.appendChild(btn);
+        });
+        
+        document.getElementById('next-btn').disabled = true;
+    }
+
+    function selectOption(index, element) {
+        const correct = questions[currentIdx].correct;
+        const opts = document.querySelectorAll('.option');
+        
+        opts.forEach((o, i) => {
+            o.classList.add('disabled');
+            if (i === correct) o.classList.add('correct');
+        });
+
+        if (index === correct) {
+            score++;
+        } else {
+            element.classList.add('wrong');
+        }
+
+        document.getElementById('next-btn').disabled = false;
+    }
+
+    function goToNext() {
+        currentIdx++;
+        if (currentIdx < questions.length) {
+            renderQuestion();
+        } else {
+            endQuiz();
+        }
+    }
+
+    function endQuiz() {
+        clearInterval(timerID);
+        document.getElementById('quiz-box').classList.add('hidden');
+        const res = document.getElementById('result-screen');
+        res.style.display = 'block';
+        document.getElementById('final-score').innerText = `${score} / ${questions.length}`;
+        const timeTaken = questions.length * 60 - timeRemaining;
+        const mm = Math.floor(timeTaken / 60), ss = timeTaken % 60;
+        document.getElementById('time-data').innerText = `Time spent: ${mm}m ${ss}s`;
+    }
+
+    init();
+</script>
+
+</body>
+</html>
